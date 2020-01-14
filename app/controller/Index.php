@@ -2,13 +2,29 @@
 
 namespace app\controller;
 
+use app\annotation\MyAnnotation;
 use app\BaseController;
-use topphp\componentBuilder\SkeletonClass;
+use think\annotation\Inject;
+use think\annotation\Route;
 
+/**
+ * Class Index
+ * @package app\controller
+ */
 class Index extends BaseController
 {
-    public function index(SkeletonClass $skeletonClass)
+    /**
+     * @Inject()
+     * @var MyAnnotation
+     */
+    public $reader;
+
+    /**
+     * @author sleep
+     * @Route("index/index",method="GET")
+     */
+    public function index()
     {
-        return $skeletonClass->echoPhrase("哈哈😁");
+        return $this->reader->dumpData("hello TOPphp");
     }
 }
