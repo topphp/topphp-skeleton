@@ -9,15 +9,11 @@ use think\annotation\Route;
 
 /**
  * Class Index
+ *
  * @package app\controller
  */
 class Index extends BaseController
 {
-    /**
-     * @Inject()
-     * @var MyAnnotation
-     */
-    public $reader;
 
     /**
      * @author sleep
@@ -25,6 +21,6 @@ class Index extends BaseController
      */
     public function index()
     {
-        return $this->reader->dumpData("hello TOPphp");
+        return "hello TOPPHP";
     }
 }

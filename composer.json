@@ -1,9 +1,9 @@
 {
-  "name": "kaituo/tophp",
-  "description": "tophp",
+  "name": "topphp/topphp-skeleton",
+  "description": "topphp-skeleton",
   "type": "project",
   "keywords": [],
-  "homepage": "http://thinkphp.cn/",
+  "homepage": "https://www.kaituocn.com/",
   "license": "Apache-2.0",
   "authors": [
     {
@@ -17,7 +17,7 @@
     "topthink/think-orm": "^2.0",
     "topthink/think-swoole": "^3.0",
     "topthink/think-annotation": "^1.0",
-    "topphp/component-builder": "dev-master"
+    "topphp/component-test": "dev-master"
   },
   "require-dev": {
     "symfony/var-dumper": "^4.2",
@@ -41,9 +41,9 @@
     ]
   },
   "repositories": {
-    "skeleton": {
+    "topphp": {
       "type": "path",
-      "url": "../component-builder"
+      "url": "../topphp/*"
     }
   }
 }
