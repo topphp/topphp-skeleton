@@ -7,7 +7,7 @@
  */
 declare(strict_types=1);
 
-namespace test;
+namespace topphp\Test;
 
 use PHPUnit\Framework\TestCase;
 
@@ -18,8 +18,13 @@ class TestDemo extends TestCase
         $stack = new \SplStack();
         $stack->push('1');
         $stack->push('2');
-        echo $stack->pop() . PHP_EOL;
-        echo $stack->pop() . PHP_EOL;
+//        echo $stack->pop() . PHP_EOL;
+//        echo $stack->pop() . PHP_EOL;
+
+        $queue = new \SplQueue();
+        $queue->push(1);
+        $queue->push(2);
+        var_dump($queue->pop());
         $this->assertTrue(true);
     }
 }
