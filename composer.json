@@ -16,8 +16,7 @@
     "topthink/framework": "^6.0.0",
     "topthink/think-orm": "^2.0",
     "topthink/think-swoole": "^3.0",
-    "topthink/think-annotation": "^1.0",
-    "topphp/component-test": "dev-master"
+    "topthink/think-annotation": "^1.0"
   },
   "require-dev": {
     "symfony/var-dumper": "^4.2",
@@ -44,6 +43,10 @@
     "topphp": {
       "type": "path",
       "url": "../topphp/*"
+    },
+    "packagist": {
+      "type": "composer",
+      "url": "https://mirrors.aliyun.com/composer"
     }
   }
 }
