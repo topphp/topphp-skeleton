@@ -18,6 +18,7 @@ class Index extends BaseController
      */
     public function index(SkeletonClass $skeletonClass): string
     {
+        testhaha();
         return $skeletonClass->echoPhrase(__FILE__);
     }
 }
