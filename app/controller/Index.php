@@ -4,21 +4,29 @@ declare(strict_types=1);
 namespace app\controller;
 
 use app\BaseController;
+use test\Single;
 use think\annotation\Route;
-use topphp\componentTest\SkeletonClass;
 
 class Index extends BaseController
 {
-
     /**
-     * @param SkeletonClass $skeletonClass
      * @return string
      * @author sleep
      * @Route("index/index",method="GET")
      */
-    public function index(SkeletonClass $skeletonClass): string
+    public function index(): string
     {
-        testhaha();
-        return $skeletonClass->echoPhrase(__FILE__);
+        return Single::getInstance()->abc();
+    }
+
+    /**
+     * @return string
+     * @Route("index/test",method="GET")
+     * @author sleep
+     */
+    public function test()
+    {
+        dump(123);
+        return "hello";
     }
 }

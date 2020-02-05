@@ -17,7 +17,7 @@
     "topthink/think-orm": "^2.0",
     "topthink/think-swoole": "^3.0",
     "topthink/think-annotation": "^1.0",
-    "topphp/component-test": "dev-master"
+    "topphp/topphp-swoole": "dev-master"
   },
   "require-dev": {
     "symfony/var-dumper": "^4.2",

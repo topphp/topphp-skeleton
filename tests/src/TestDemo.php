@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace topphp\Test;
 
 use PHPUnit\Framework\TestCase;
+use Test\Person;
 
 class TestDemo extends TestCase
 {
@@ -18,8 +19,8 @@ class TestDemo extends TestCase
         $stack = new \SplStack();
         $stack->push('1');
         $stack->push('2');
-//        echo $stack->pop() . PHP_EOL;
-//        echo $stack->pop() . PHP_EOL;
+        echo $stack->pop() . PHP_EOL;
+        echo $stack->pop() . PHP_EOL;
 
         $queue = new \SplQueue();
         $queue->push(1);
@@ -27,4 +28,28 @@ class TestDemo extends TestCase
         var_dump($queue->pop());
         $this->assertTrue(true);
     }
+
+    public function testIntDiv()
+    {
+        $int = intdiv(10, 3);
+        $this->assertEquals($int, 3);
+    }
+
+    public function testList()
+    {
+        go(function () {
+            echo "gogogo1";
+        });
+        go(function () {
+            echo "gogogo2";
+        });
+        $arr = [1, 2, 3];
+        $d   = max($arr);
+        [$a, $b, $c] = $arr;
+        var_dump($arr);
+        $this->assertEquals($a, 1);
+        $this->assertEquals($b, 2);
+        $this->assertEquals($c, 3);
+    }
+
 }
