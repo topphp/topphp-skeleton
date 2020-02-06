@@ -4,8 +4,10 @@ declare(strict_types=1);
 namespace app\controller;
 
 use app\BaseController;
+use Swoole\Server;
 use test\Single;
 use think\annotation\Route;
+use think\facade\Filesystem;
 
 class Index extends BaseController
 {
@@ -26,7 +28,10 @@ class Index extends BaseController
      */
     public function test()
     {
-        dump(123);
-        return "hello";
+        $file = request()->file('img');
+        if (!is_null($file)) {
+            return Filesystem::disk('public')->putFile('topic', $file);
+        }
+        return 'bucunzai';
     }
 }
