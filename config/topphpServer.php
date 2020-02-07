@@ -31,13 +31,14 @@ return [
 //                'open_websocket_protocol' => true
 //            ]
 //        ],
-        [
-            'type'      => WebSocketServer::class,
-            'name'      => 'top-server3',
-            'host'      => env('SWOOLE_HOST', '127.0.0.1'), // 监听地址
-            'port'      => 9503,                            // 监听端口
-            'sock_type' => SWOOLE_SOCK_TCP,
-        ],
+
+//        [
+//            'type'      => WebSocketServer::class,
+//            'name'      => 'top-server3',
+//            'host'      => env('SWOOLE_HOST', '127.0.0.1'), // 监听地址
+//            'port'      => 9503,                            // 监听端口
+//            'sock_type' => SWOOLE_SOCK_TCP,
+//        ],
     ],
     'options' => [
         'pid_file'              => runtime_path() . 'topphp_swoole.pid',
