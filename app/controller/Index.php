@@ -4,21 +4,28 @@ declare(strict_types=1);
 namespace app\controller;
 
 use app\BaseController;
-use Swoole\Server;
 use test\Single;
 use think\annotation\Route;
 use think\facade\Filesystem;
+use think\response\Json;
+use think\swoole\middleware\ResetVarDumper;
 
 class Index extends BaseController
 {
     /**
-     * @return string
-     * @author sleep
+     * @return Json
      * @Route("index/index",method="GET")
+     * @author sleep
      */
-    public function index(): string
+    public function index()
     {
-        return Single::getInstance()->abc();
+        go(function () {
+            $r = new ResetVarDumper();
+            $r->handle($this->request, function () {
+                var_dump('haha');
+            });
+        });
+        return json(['a' => Single::getInstance()->abc()])->code(404);
     }
 
     /**

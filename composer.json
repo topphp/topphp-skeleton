@@ -42,6 +42,9 @@
     "preferred-install": "dist"
   },
   "scripts": {
+    "post-root-package-install": [
+      "@php -r \"file_exists('.env') || copy('.example.env', '.env');\""
+    ],
     "post-autoload-dump": [
       "@php think service:discover",
       "@php think vendor:publish"
