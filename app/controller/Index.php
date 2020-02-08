@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace app\controller;
 
 use app\BaseController;
+use Swoole\Coroutine;
 use test\Single;
 use think\annotation\Route;
 use think\facade\Filesystem;
@@ -19,7 +20,7 @@ class Index extends BaseController
      */
     public function index()
     {
-        go(function () {
+        Coroutine::create(function () {
             $r = new ResetVarDumper();
             $r->handle($this->request, function () {
                 var_dump('haha');
