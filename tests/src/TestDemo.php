@@ -7,10 +7,10 @@
  */
 declare(strict_types=1);
 
-namespace topphp\Test;
+namespace Topphp\Test;
 
-use PHPUnit\Framework\TestCase;
-use Test\Person;
+use Swoole\Coroutine;
+use Topphp\TopphpTesting\TestCase;
 
 class TestDemo extends TestCase
 {
@@ -37,11 +37,11 @@ class TestDemo extends TestCase
 
     public function testList()
     {
-        go(function () {
-            echo "gogogo1";
+        Coroutine::create(function () {
+            echo "gogogo1\n";
         });
-        go(function () {
-            echo "gogogo2";
+        Coroutine::create(function () {
+            echo "gogogo2\n";
         });
         $arr = [1, 2, 3];
         $d   = max($arr);
