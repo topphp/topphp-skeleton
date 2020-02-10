@@ -12,7 +12,7 @@ namespace Topphp\Test;
 use Swoole\Coroutine;
 use Topphp\TopphpTesting\TestCase;
 
-class TestDemo extends TestCase
+class DemoTest extends TestCase
 {
     public function testIndex()
     {
