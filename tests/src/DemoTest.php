@@ -51,5 +51,4 @@ class DemoTest extends TestCase
         $this->assertEquals($b, 2);
         $this->assertEquals($c, 3);
     }
-
 }
