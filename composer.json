@@ -13,17 +13,18 @@
   ],
   "require": {
     "php": ">=7.2.0",
+    "ext-json": "*",
+    "ext-mbstring": "*",
     "topthink/framework": "^6.0.0",
-    "topthink/think-orm": "^2.0",
     "topthink/think-swoole": "^3.0",
     "topthink/think-annotation": "^1.0",
-    "topthink/think-multi-app": "^1.0"
+    "topthink/think-multi-app": "^1.0",
+    "topphp/topphp-swoole": "dev-master"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "^3.5",
     "symfony/var-dumper": "^4.2",
     "topthink/think-trace": "^1.0",
-    "topphp/topphp-swoole": "dev-master",
     "topphp/topphp-testing": "dev-master"
   },
   "autoload": {
