@@ -16,16 +16,19 @@
     "ext-json": "*",
     "ext-mbstring": "*",
     "topthink/framework": "^6.0.0",
-    "topthink/think-swoole": "^3.0",
     "topthink/think-annotation": "^1.0",
     "topthink/think-multi-app": "^1.0",
-    "topphp/topphp-swoole": "dev-master"
+    "topphp/topphp-swoole": "dev-master",
+    "topphp/topphp-wechat": "dev-master",
+    "topphp/topphp-generate": "dev-master",
+    "topthink/think-swoole": "^3.0.6",
+    "topphp/topphp-log": "dev-master"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "^3.5",
     "symfony/var-dumper": "^4.2",
     "topthink/think-trace": "^1.0",
-    "topphp/topphp-testing": "dev-master"
+    "topphp/topphp-testing": "*"
   },
   "autoload": {
     "psr-4": {
@@ -44,7 +47,7 @@
     "preferred-install": "dist"
   },
   "scripts": {
-    "test": "./vendor/bin/phpunit -c ./phpunit.xml.dist",
+    "test": "./vendor/bin/co-phpunit -c ./phpunit.xml.dist",
     "check-style": "phpcs app tests",
     "fix-style": "phpcbf app tests",
     "post-root-package-install": [
