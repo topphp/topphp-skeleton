@@ -16,7 +16,7 @@ return [
         [
             'type'      => HttpServer::class,
             'name'      => 'gateway',
-            'host'      => env('SWOOLE_HOST', '127.0.0.1'), // 监听地址
+            'host'      => '0.0.0.0',                       // 监听地址
             'port'      => 9501,                            // 监听端口
             'sock_type' => SWOOLE_SOCK_TCP,
             'options'   => [
@@ -27,15 +27,15 @@ return [
         [
             'type'      => RpcServer::class,
             'name'      => 'film-server',
-            'host'      => env('SWOOLE_HOST', '127.0.0.1'), // 监听地址
+            'host'      => '0.0.0.0',                       // 监听地址
             'port'      => 9502,                            // 监听端口
             'sock_type' => SWOOLE_SOCK_TCP,
             'options'   => []
         ],
         [
             'type'      => RpcServer::class,
-            'name'      => 'cinema-server',
-            'host'      => env('SWOOLE_HOST', '127.0.0.1'), // 监听地址
+            'name'      => 'film-server',
+            'host'      => '0.0.0.0',                       // 监听地址
             'port'      => 9503,                            // 监听端口
             'sock_type' => SWOOLE_SOCK_TCP,
             'options'   => []
@@ -43,8 +43,8 @@ return [
 //        [
 //            'type'      => WebSocketServer::class,
 //            'name'      => 'top-WebSocketServer',
-//            'host'      => env('SWOOLE_HOST', '127.0.0.1'), // 监听地址
-//            'port'      => 9504,                            // 监听端口
+//            'host'      => '0.0.0.0',                        // 监听地址
+//            'port'      => 9504,                             // 监听端口
 //            'sock_type' => SWOOLE_SOCK_TCP,
 //            'options'   => []
 //        ],
@@ -54,20 +54,38 @@ return [
         'log_file'              => runtime_path() . 'topphp_swoole.log',
         'daemonize'             => !env('APP_DEBUG'),   // 是否开启守护进程
         // Normally this value should be 1~4 times larger according to your cpu cores.
-        'reactor_num'           => swoole_cpu_num(),
         'worker_num'            => swoole_cpu_num(),
-        'task_worker_num'       => swoole_cpu_num(),
+        'task_worker_num'       => swoole_cpu_num(),    // 配置 Task 进程的数量。【默认值：未配置则不启动 task】
         'task_enable_coroutine' => true,
-        'task_max_request'      => 3000,
+        'task_max_request'      => 1000000,
         'enable_static_handler' => true,
         'document_root'         => root_path('public'),
         'package_max_length'    => 20 * 1024 * 1024,
         'buffer_output_size'    => 10 * 1024 * 1024,
         'socket_buffer_size'    => 128 * 1024 * 1024,
-        'max_request'           => 3000,
+        'max_request'           => 1000000,
         'max_wait_time'         => 60,
         'send_yield'            => true,
-        'reload_async'          => true,
-        'enable_coroutine'      => true,
+    ],
+
+    'clients' => [
+        [
+            'name'     => 'film-server',
+            'balancer' => 'random',
+            'nodes'    => [
+                ['host' => '0.0.0.0', 'port' => 9502],
+                ['host' => '127.0.0.1', 'port' => 9503]
+            ],
+            'options' => []
+        ],
+        [
+            'name'     => 'cinema-server',
+            'balancer' => 'random',
+            'nodes'    => [
+                ['host' => '192.168.31.108', 'port' => 9502],
+                ['host' => '127.0.0.1', 'port' => 9503]
+            ],
+            'options' => []
+        ]
     ],
 ];

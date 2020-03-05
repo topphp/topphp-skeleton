@@ -3,15 +3,16 @@ declare (strict_types=1);
 
 namespace app\service;
 
+use think\App;
 use Topphp\TopphpSwoole\annotation\Rpc;
-use Topphp\TopphpSwoole\services\RpcService;
+use Topphp\TopphpSwoole\services\RpcProviderService;
 
 /**
- * @Rpc(id="filmService",protocol="jsonrpc",name="film-server")
+ * @Rpc(serviceName="filmService",protocol="jsonrpc",serverName="film-server")
  */
-class FilmService extends RpcService
+class FilmService extends RpcProviderService
 {
-    public static function test($a, $b)
+    public function test($a, $b)
     {
         return $a + $b;
     }
