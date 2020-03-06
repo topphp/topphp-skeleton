@@ -6,86 +6,64 @@
  * Author: sleep <sleep@kaituocn.com>
  */
 
-use Topphp\TopphpSwoole\server\HttpServer;
-use Topphp\TopphpSwoole\server\RpcServer;
-use Topphp\TopphpSwoole\server\WebSocketServer;
+use topphp\swoole\server\HttpServer;
+use topphp\swoole\server\TcpServer;
+use topphp\swoole\server\WebSocketServer;
 
 return [
-    'mode'    => SWOOLE_PROCESS,                  // 运行模式为SWOOLE_PROCESS时支持热重启.
+    'mode'    => SWOOLE_PROCESS,                  // 运行模式 默认为SWOOLE_PROCESS
     'servers' => [
         [
             'type'      => HttpServer::class,
-            'name'      => 'gateway',
-            'host'      => '0.0.0.0',                       // 监听地址
+            'name'      => 'top-server1',
+            'host'      => env('SWOOLE_HOST', '127.0.0.1'), // 监听地址
             'port'      => 9501,                            // 监听端口
             'sock_type' => SWOOLE_SOCK_TCP,
             'options'   => [
-                // 开启websocket服务时设为true
-                'open_websocket_protocol' => false
+                'open_http_protocol'      => true,
+                'open_websocket_protocol' => true
             ]
         ],
+//        [
+//            'type'      => TcpServer::class,
+//            'name'      => 'top-server2',
+//            'host'      => env('SWOOLE_HOST', '127.0.0.1'), // 监听地址
+//            'port'      => 9502,                            // 监听端口
+//            'sock_type' => SWOOLE_SOCK_TCP,
+//            'options'   => [
+//                'open_http_protocol'      => true,
+//                'open_websocket_protocol' => true
+//            ]
+//        ],
+
         [
-            'type'      => RpcServer::class,
-            'name'      => 'film-server',
-            'host'      => '0.0.0.0',                       // 监听地址
-            'port'      => 9502,                            // 监听端口
-            'sock_type' => SWOOLE_SOCK_TCP,
-            'options'   => []
-        ],
-        [
-            'type'      => RpcServer::class,
-            'name'      => 'film-server',
-            'host'      => '0.0.0.0',                       // 监听地址
+            'type'      => WebSocketServer::class,
+            'name'      => 'top-server3',
+            'host'      => env('SWOOLE_HOST', '127.0.0.1'), // 监听地址
             'port'      => 9503,                            // 监听端口
             'sock_type' => SWOOLE_SOCK_TCP,
-            'options'   => []
+            'options'   => [
+                'open_http_protocol'      => true,
+                'open_websocket_protocol' => true
+            ]
         ],
-//        [
-//            'type'      => WebSocketServer::class,
-//            'name'      => 'top-WebSocketServer',
-//            'host'      => '0.0.0.0',                        // 监听地址
-//            'port'      => 9504,                             // 监听端口
-//            'sock_type' => SWOOLE_SOCK_TCP,
-//            'options'   => []
-//        ],
     ],
     'options' => [
         'pid_file'              => runtime_path() . 'topphp_swoole.pid',
         'log_file'              => runtime_path() . 'topphp_swoole.log',
-        'daemonize'             => !env('APP_DEBUG'),   // 是否开启守护进程
+        'daemonize'             => false,   // 是否开启守护进程
         // Normally this value should be 1~4 times larger according to your cpu cores.
+        'reactor_num'           => swoole_cpu_num(),
         'worker_num'            => swoole_cpu_num(),
-        'task_worker_num'       => swoole_cpu_num(),    // 配置 Task 进程的数量。【默认值：未配置则不启动 task】
+        'task_worker_num'       => swoole_cpu_num(),
         'task_enable_coroutine' => true,
-        'task_max_request'      => 1000000,
+        'task_max_request'      => 3000,
         'enable_static_handler' => true,
         'document_root'         => root_path('public'),
         'package_max_length'    => 20 * 1024 * 1024,
         'buffer_output_size'    => 10 * 1024 * 1024,
         'socket_buffer_size'    => 128 * 1024 * 1024,
-        'max_request'           => 1000000,
-        'max_wait_time'         => 60,
+        'max_request'           => 3000,
         'send_yield'            => true,
-    ],
-
-    'clients' => [
-        [
-            'name'     => 'film-server',
-            'balancer' => 'random',
-            'nodes'    => [
-                ['host' => '0.0.0.0', 'port' => 9502],
-                ['host' => '127.0.0.1', 'port' => 9503]
-            ],
-            'options' => []
-        ],
-        [
-            'name'     => 'cinema-server',
-            'balancer' => 'random',
-            'nodes'    => [
-                ['host' => '192.168.31.108', 'port' => 9502],
-                ['host' => '127.0.0.1', 'port' => 9503]
-            ],
-            'options' => []
-        ]
     ],
 ];

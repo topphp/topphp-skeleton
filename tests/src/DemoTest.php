@@ -11,7 +11,6 @@ namespace Topphp\Test;
 
 use Swoole\Coroutine;
 use Topphp\TopphpTesting\TestCase;
-use Topphp\TopphpWechat\WeChat;
 
 class DemoTest extends TestCase
 {
@@ -53,12 +52,4 @@ class DemoTest extends TestCase
         $this->assertEquals($c, 3);
     }
 
-    public function testWeChat()
-    {
-        $we      = $this->app->get(WeChat::class);
-        $app     = $we::officialAccount([]);
-        $res     = $app->server->serve();
-        $success = $res->send()->getContent();
-        $this->assertEquals($success, 'success');
-    }
 }
