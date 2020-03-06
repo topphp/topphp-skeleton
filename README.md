@@ -1,7 +1,7 @@
-ThinkPHP 6.0
+Topphp
 ===============
 
-> 运行环境要求PHP7.1+。
+> Topphp-skeleton是基于ThinkPHP 6.0架构二次开发的骨架框架，运行环境要求PHP7.2+。
 
 ## 主要新特性
 
@@ -21,10 +21,10 @@ ThinkPHP 6.0
 ## 安装
 
 ~~~
-composer create-project 
+composer require topphp/topphp-skeleton
 ~~~
 
-如果需要更新框架使用
+如果需要更新TP6框架使用
 ~~~
 composer update topthink/framework
 ~~~
