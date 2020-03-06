@@ -19,7 +19,8 @@
     "topthink/think-annotation": "^1.0",
     "topthink/think-multi-app": "^1.0",
     "topphp/topphp-testing": "^1.0",
-    "topphp/topphp-log": "^1.0"
+    "topphp/topphp-log": "^1.0",
+    "topphp/topphp-generate": "dev-master"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "^3.5",
@@ -55,13 +56,13 @@
     ]
   },
   "repositories": {
-    "topphp": {
-      "type": "path",
-      "url": "../topphp/*"
-    },
     "packagist": {
       "type": "composer",
       "url": "https://mirrors.aliyun.com/composer"
+    },
+    "topphp": {
+      "type": "path",
+      "url": "../topphp/*"
     }
   }
 }
