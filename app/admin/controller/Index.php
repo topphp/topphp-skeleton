@@ -18,6 +18,6 @@ class Index extends Base
      */
     public function index()
     {
-        return "Hello Admin";
+        return "Hello Topphp Admin !";
     }
 }

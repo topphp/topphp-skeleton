@@ -17,7 +17,7 @@ class Base extends BaseController
      * 定义业务中间件
      * @var array
      */
-    protected $middleware = [];
+    protected $middleware = ['Admin'];
 
     // Admin应用基础业务逻辑（所有方法需定义protected关键词）
 

@@ -6,7 +6,7 @@ namespace app\middleware;
 class Check
 {
     /**
-     * 验证器中间件
+     * 验证器中间件【全局中间件】
      * @param $request
      * @param \Closure $next
      * @return mixed
@@ -14,7 +14,6 @@ class Check
      */
     public function handle($request, \Closure $next)
     {
-
         return $next($request);
     }
 }

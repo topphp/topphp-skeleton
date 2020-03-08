@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace app\index\controller;
 
 
+
 class Index extends Base
 {
     /**
@@ -18,6 +19,6 @@ class Index extends Base
      */
     public function index()
     {
-        return "Hello Index";
+        return "Hello Topphp Index !";
     }
 }
