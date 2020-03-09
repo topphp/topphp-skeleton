@@ -1,12 +1,12 @@
 <?php
 declare (strict_types = 1);
 
-namespace app\middleware;
+namespace app\admin\middleware;
 
 class Auth
 {
     /**
-     * 接口权限中间件【index应用中间件】
+     * 后台管理接口权限中间件【admin应用中间件】
      * @param $request
      * @param \Closure $next
      * @return mixed
@@ -14,7 +14,7 @@ class Auth
      */
     public function handle($request, \Closure $next)
     {
-        // todo 前后端分离模式 api_token user_token 等校验 或者 非分离模式 用户信息，权限等
+        // todo 前后端分离模式 api_token admin_token 等校验 或者 非分离模式 管理员用户信息，权限等
         return $next($request);
     }
 

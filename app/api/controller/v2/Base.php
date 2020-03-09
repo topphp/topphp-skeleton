@@ -6,7 +6,7 @@
  */
 declare(strict_types=1);
 
-namespace app\admin\controller;
+namespace app\api\controller\v2;
 
 
 use app\BaseController;
@@ -17,8 +17,8 @@ class Base extends BaseController
      * 定义业务中间件
      * @var array
      */
-    protected $middleware = ['Auth'];
+    protected $middleware = ['V2'];
 
-    // Admin应用基础业务逻辑（所有方法需定义protected关键词）
+    // 多版本Api应用基础业务逻辑（所有方法需定义protected关键词）
 
 }

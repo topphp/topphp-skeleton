@@ -6,7 +6,7 @@
  */
 declare(strict_types=1);
 
-namespace app\index\controller;
+namespace app\api\controller\v1;
 
 
 class Index extends Base
@@ -18,6 +18,6 @@ class Index extends Base
      */
     public function index()
     {
-        return "Hello Topphp Index !";
+        return "Hello Topphp Api.v1 !";
     }
 }
