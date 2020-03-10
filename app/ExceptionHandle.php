@@ -120,7 +120,8 @@ class ExceptionHandle extends Handle
         if ($code === 0) {
             $code = CommonCodeEnum::FAIL;
         }
-        if ($request->isAjax() || $request->isPjax()) {
+        $appName = app('http')->getName();
+        if ($request->isAjax() || $request->isPjax() || in_array($appName, config("app.exception_app_list"))) {
             $returnData = $this->createReturn($request, $code, $message, $topData, $httpCode, $abnormity);
             return json($returnData, $httpCode);
         }
