@@ -10,12 +10,13 @@ namespace lib;
 
 
 use app\common\enumerate\CommonCodeEnum;
+use app\common\enumerate\HttpStatusEnum;
 
 class TopException extends \Exception
 {
     public $code = CommonCodeEnum::FAIL;
     public $message = 'System exception';
-    public $httpCode = 500;
+    public $httpCode = HttpStatusEnum::SERVER_ERROR;
     public $topData = [];
 
     public function __construct($params = [])
