@@ -9,56 +9,12 @@ declare(strict_types=1);
 
 namespace Topphp\Test;
 
-use Swoole\Coroutine;
-use Topphp\TopphpTesting\TestCase;
-use Topphp\TopphpWechat\WeChat;
+use Topphp\TopphpTesting\HttpTestCase;
 
-class DemoTest extends TestCase
+class DemoTest extends HttpTestCase
 {
     public function testIndex()
     {
-        $stack = new \SplStack();
-        $stack->push('1');
-        $stack->push('2');
-        echo $stack->pop() . PHP_EOL;
-        echo $stack->pop() . PHP_EOL;
-
-        $queue = new \SplQueue();
-        $queue->push(1);
-        $queue->push(2);
-        var_dump($queue->pop());
         $this->assertTrue(true);
-    }
-
-    public function testIntDiv()
-    {
-        $int = intdiv(10, 3);
-        $this->assertEquals($int, 3);
-    }
-
-    public function testList()
-    {
-        Coroutine::create(function () {
-            echo "gogogo1\n";
-        });
-        Coroutine::create(function () {
-            echo "gogogo2\n";
-        });
-        $arr = [1, 2, 3];
-        $d   = max($arr);
-        [$a, $b, $c] = $arr;
-        var_dump($arr);
-        $this->assertEquals($a, 1);
-        $this->assertEquals($b, 2);
-        $this->assertEquals($c, 3);
-    }
-
-    public function testWeChat()
-    {
-        $we      = $this->app->get(WeChat::class);
-        $app     = $we::officialAccount([]);
-        $res     = $app->server->serve();
-        $success = $res->send()->getContent();
-        $this->assertEquals($success, 'success');
     }
 }

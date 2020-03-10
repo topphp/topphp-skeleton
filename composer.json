@@ -18,17 +18,14 @@
     "topthink/framework": "^6.0.0",
     "topthink/think-annotation": "^1.0",
     "topthink/think-multi-app": "^1.0",
-    "topphp/topphp-swoole": "dev-master",
-    "topphp/topphp-wechat": "dev-master",
-    "topphp/topphp-generate": "dev-master",
-    "topthink/think-swoole": "^3.0.6",
-    "topphp/topphp-log": "dev-master"
+    "topphp/topphp-log": "^1.0",
+    "topphp/topphp-generate": "dev-master"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "^3.5",
     "symfony/var-dumper": "^4.2",
     "topthink/think-trace": "^1.0",
-    "topphp/topphp-testing": "*"
+    "topphp/topphp-testing": "^1.0"
   },
   "autoload": {
     "psr-4": {
@@ -59,13 +56,13 @@
     ]
   },
   "repositories": {
-    "topphp": {
-      "type": "path",
-      "url": "../topphp/*"
-    },
     "packagist": {
       "type": "composer",
       "url": "https://mirrors.aliyun.com/composer"
+    },
+    "topphp": {
+      "type": "path",
+      "url": "../topphp/*"
     }
   }
 }

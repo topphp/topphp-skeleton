@@ -4,7 +4,15 @@
 // +----------------------------------------------------------------------
 return [
     // 内置Html和Console两种方式 支持扩展
-    'type'    => 'Html',
-    // 读取的日志通道名
-    'channel' => '',
+    'type'    => 'Console',
+    // 读取的日志通道名（仅支持file）
+    'channel' => 'file',
+    // 自定义选项卡
+    'tabs'    => [
+        'base'                                          => '基本',
+        'file'                                          => '文件',
+        'error|notice|warning|critical|alert|emergency' => '错误',
+        'sql'                                           => 'SQL',
+        'debug|info'                                    => '调试',
+    ],
 ];

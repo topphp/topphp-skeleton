@@ -3,16 +3,14 @@ declare (strict_types = 1);
 
 namespace app\middleware;
 
-use think\Response;
-
 class Check
 {
     /**
-     * 处理请求
-     *
-     * @param \think\Request $request
-     * @param \Closure       $next
-     * @return Response
+     * 验证器中间件【全局中间件】
+     * @param $request
+     * @param \Closure $next
+     * @return mixed
+     * @author bai
      */
     public function handle($request, \Closure $next)
     {

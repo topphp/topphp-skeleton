@@ -52,8 +52,7 @@ abstract class BaseController
 
     // 初始化
     protected function initialize()
-    {
-    }
+    {}
 
     /**
      * 验证数据
@@ -91,4 +90,5 @@ abstract class BaseController
 
         return $v->failException(true)->check($data);
     }
+
 }

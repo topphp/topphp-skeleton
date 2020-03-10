@@ -17,10 +17,10 @@ return [
 
     // 日志通道列表
     'channels'     => [
-        'file' => [
+        'file'   => [
             // 日志记录方式
             'type'           => 'File',
-            // 日志保存目录
+            // 日志保存目录（不传默认写入runtime/log内）
             'path'           => '',
             // 单文件日志写入
             'single'         => false,
@@ -34,12 +34,36 @@ return [
             'processor'      => null,
             // 关闭通道日志写入
             'close'          => false,
+            // 时间记录格式
+            'time_format'    => 'c',
             // 日志输出格式化
             'format'         => '[%s][%s] %s',
             // 是否实时写入
             'realtime_write' => false,
         ],
-        // 其它日志通道配置
+        // 其它日志通道配置（示例Aliyun）
+        'aliyun' => [
+            // 日志记录方式
+            'type'              => 'Aliyun',
+            // 使用你的阿里云访问秘钥 AccessKeyId
+            'access_key_id'     => '',
+            // 使用你的阿里云访问秘钥 AccessKeySecret
+            'access_key_secret' => '',
+            // 创建的项目名称
+            'project'           => '',
+            // 选择与创建 project 所属区域匹配的 Endpoint
+            'endpoint'          => '',
+            // 创建的日志库名称
+            'logstore'          => '',
+            // 使用JSON格式记录（存储阿里云建议使用json方式，效果更好）
+            'json'              => false,
+            // 关闭通道日志写入
+            'close'             => false,
+            // 时间记录格式
+            'time_format'       => 'c',
+            // 日志输出格式化
+            'format'            => '[%s][%s] %s',
+        ],
     ],
 
 ];
