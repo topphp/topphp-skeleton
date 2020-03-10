@@ -219,7 +219,7 @@ class SendMsg
     }
 
     /**
-     * 操作弹层/提示/消息/警告返回
+     * 操作弹层/提示/消息/警告返回【简化使用，前置message】
      * @param int $code
      * @param string $message
      * @param array $data
@@ -229,8 +229,8 @@ class SendMsg
      * @throws TopException
      */
     public static function jsonAlert(
-        $code = CommonCodeEnum::FAIL,
         $message = "fail",
+        $code = CommonCodeEnum::FAIL,
         $data = [],
         $httpCode = HttpStatusEnum::SUCCESS,
         $headers = []
@@ -249,7 +249,7 @@ class SendMsg
     }
 
     /**
-     * 操作弹层/提示/消息/警告返回【强制抛出模式】
+     * 操作弹层/提示/消息/警告返回【强制抛出模式】【简化使用，前置message】
      * @param int $code
      * @param string $message
      * @param array $data
@@ -259,8 +259,8 @@ class SendMsg
      * @throws TopException
      */
     public static function jsonThrow(
-        $code = CommonCodeEnum::FAIL,
         $message = "fail",
+        $code = CommonCodeEnum::FAIL,
         $data = [],
         $httpCode = HttpStatusEnum::SUCCESS,
         $headers = []
@@ -326,7 +326,7 @@ class SendMsg
     }
 
     /**
-     * 操作弹层/提示/消息/警告返回
+     * 操作弹层/提示/消息/警告返回【简化使用，前置message】
      * @param int $code
      * @param string $message
      * @param array $data
@@ -336,8 +336,8 @@ class SendMsg
      * @throws TopException
      */
     public static function xmlAlert(
-        $code = CommonCodeEnum::FAIL,
         $message = "fail",
+        $code = CommonCodeEnum::FAIL,
         $data = [],
         $httpCode = HttpStatusEnum::SUCCESS,
         $headers = []
@@ -346,7 +346,7 @@ class SendMsg
     }
 
     /**
-     * 操作弹层/提示/消息/警告返回【强制抛出模式】
+     * 操作弹层/提示/消息/警告返回【强制抛出模式】【简化使用，前置message】
      * @param int $code
      * @param string $message
      * @param array $data
@@ -356,8 +356,8 @@ class SendMsg
      * @throws TopException
      */
     public static function xmlThrow(
-        $code = CommonCodeEnum::FAIL,
         $message = "fail",
+        $code = CommonCodeEnum::FAIL,
         $data = [],
         $httpCode = HttpStatusEnum::SUCCESS,
         $headers = []

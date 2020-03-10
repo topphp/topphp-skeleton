@@ -5,6 +5,7 @@
  * 多版本api路由
  */
 
+use app\common\enumerate\CommonCodeEnum;
 use think\facade\Route;
 
 // api 版本路由【以下路由顺序不可更改】
@@ -17,7 +18,7 @@ Route::rule('v1', 'v1.Index/index', '*');
 Route::rule('v2', 'v2.Index/index', '*');
 Route::miss(function () {
     if (request()->isAjax() || request()->isPjax()) {
-        return json('404 Not Found!', 404);
+        return \lib\SendMsg::jsonAlert('404 Not Found!', CommonCodeEnum::FAIL, [], 404);
     } else {
         return response('404 Not Found!', 404);
     }
