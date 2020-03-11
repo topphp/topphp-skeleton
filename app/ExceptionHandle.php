@@ -96,10 +96,19 @@ class ExceptionHandle extends Handle
         $message   = $e->getMessage();
         $httpCode  = isset($e->httpCode) ? $e->httpCode : HttpStatusEnum::SERVER_ERROR;
         $topData   = isset($e->topData) ? $e->topData : [];
-        // 参数验证错误
+        // 参数验证错误（使用注解验证器有效）
         if ($e instanceof ValidateException) {
             $message  = $e->getError();
             $httpCode = HttpStatusEnum::VALIDATE_ERROR;
+            if (is_array($message)) {
+                foreach ($message as $filed => $msg) {
+                    $returnData = $this->createReturn($request, CommonCodeEnum::FAIL, $msg, $topData, $httpCode);
+                    return $this->sendMsg($returnData, $httpCode);
+                }
+            } elseif (is_string($message)) {
+                $returnData = $this->createReturn($request, CommonCodeEnum::FAIL, $message, $topData, $httpCode);
+                return $this->sendMsg($returnData, $httpCode);
+            }
         }
         //代码异常
         if ($e instanceof \ParseError || $e instanceof \Error || $e instanceof PDOException
@@ -124,7 +133,7 @@ class ExceptionHandle extends Handle
         if ($request->isAjax() || $request->isPjax() || isset($e->httpCode) || in_array($appName,
                 config("app.exception_app_list"))) {
             $returnData = $this->createReturn($request, $code, $message, $topData, $httpCode, $abnormity);
-            return json($returnData, $httpCode);
+            return $this->sendMsg($returnData, $httpCode);
         }
         // 其他错误交给系统处理
         return parent::render($request, $e);
@@ -154,5 +163,20 @@ class ExceptionHandle extends Handle
             $returnData['operate'] = app('http')->getName() . '/' . $request->controller() . '/' . $request->action();
         }
         return $returnData;
+    }
+
+    private function sendMsg($data, $httpCode)
+    {
+        switch (strtolower(config("app.default_ajax_return"))) {
+            case "jsonp":
+                $type = "jsonp";
+                break;
+            case "xml":
+                $type = "xml";
+                break;
+            default:
+                $type = "json";
+        }
+        return response($data, $httpCode, [], $type);
     }
 }
