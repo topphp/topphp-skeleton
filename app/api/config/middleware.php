@@ -1,4 +1,9 @@
 <?php
+/**
+ * @copyright 凯拓软件 [临渊羡鱼不如退而结网,凯拓与你一同成长]
+ * @author sleep <sleep@kaituocn.com>
+ */
+
 // 多版本api中间件配置
 return [
     // 别名或分组
