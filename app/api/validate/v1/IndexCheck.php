@@ -11,7 +11,7 @@ namespace app\api\validate\v1;
 
 use think\Validate;
 
-class indexCheck extends Validate
+class IndexCheck extends Validate
 {
 
     // 注意：全部Topphp验证器文件名统一以Check结尾，否则不会生效
