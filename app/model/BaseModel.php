@@ -1289,9 +1289,10 @@ trait BaseModel
      * @param array $order 原生排序SQL语句 或 数组 如：['price','id'=>'desc'] 生成的SQL为 ORDER BY `price`,`id` desc
      * @param string $limit 限制条数 默认 * 不限制
      * @param string $isOr 是否是 OR 查询 默认 AND
-     * @return array|bool 返回结果数组
+     * @param bool $isModel 是否返回Model对象（默认 false 如果返回Model对象，我们还可以链式调用TP的分页，进行分页操作）
+     * @return array|bool|\think\Model 返回结果数组
      */
-    public function selectSort($where = [], $order = [], $limit = "*", string $isOr = "and")
+    public function selectSort($where = [], $order = [], $limit = "*", string $isOr = "and", bool $isModel = false)
     {
         try {
             if (empty($where)) {
@@ -1303,11 +1304,14 @@ trait BaseModel
             $model  = $this->filterSoftDelData($model);
             $model  = is_array($order) ? $model->order($order) : $model->orderRaw((string)$order);
             if ($limit === "*") {
-                $data = $model->select();
             } else {
-                $data = $model->limit((int)$limit)->select();
+                $model = $model->limit((int)$limit);
             }
-            $all = $data ? $data->toArray() : [];
+            if ($isModel) {
+                return $model;
+            }
+            $data = $model->select();
+            $all  = $data ? $data->toArray() : [];
             return $all;
         } catch (\Exception $e) {
             // 返回model错误
