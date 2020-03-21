@@ -58,7 +58,7 @@ class Check
         $module       = app('http')->getName();
         $validateName = '\app\\' . $module . '\validate\\' . $validateDir . $controllerName . "Check";
         if (class_exists($validateName)) {
-            // 验证器白名单校验
+            // 验证器白名单校验（支持通配符设置）
             $operateToModule     = strtolower($module . "/*/*");
             $operateToController = strtolower($module . "/" . $request->controller() . "/*");
             $operateToAction     = strtolower($module . "/" . $request->controller() . "/" . $request->action());
@@ -68,8 +68,10 @@ class Check
                 // 开始验证
                 $validate = new $validateName();
                 if (empty($layeredName)) {
+                    // 非多层级控制器验证
                     $validateRes = $validate->scene(strtolower($request->action()))->check($data);
                 } else {
+                    // 多层级控制器验证（层级简化判断）
                     $versionArr = isset(CheckConfigEnum::API_VERSION_LIST[$module]) ? CheckConfigEnum::API_VERSION_LIST[$module] : [];
                     if (!empty($versionArr) && is_array($versionArr)) {
                         if (in_array($checkVersion, $versionArr)) {
