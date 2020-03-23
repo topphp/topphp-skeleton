@@ -19,6 +19,18 @@ class Check
      */
     public function handle(Request $request, \Closure $next)
     {
+        // 校验操作是否存在
+        $module       = app('http')->getName();
+        $operateClass = 'app\\' . $module . "\\controller\\" . preg_replace("/\./", "\\",
+                $request->controller());
+        if (!method_exists($operateClass, $request->action())) {
+            if ($request->isAjax() || $request->isPjax()) {
+                return SendMsg::jsonThrow('404 Not Found!', CommonCodeEnum::FAIL, [], 404);
+            } else {
+                return response('404 Not Found!', 404);
+            }
+        }
+        // 开始验证
         $data = [];
         if ($request->isPost()) {
             $data = $request->post();
@@ -55,7 +67,6 @@ class Check
             $layeredName     = "";
             $validateDir     = "";
         }
-        $module       = app('http')->getName();
         $validateName = '\app\\' . $module . '\validate\\' . $validateDir . $controllerName . "Check";
         if (class_exists($validateName)) {
             // 验证器白名单校验（支持通配符设置）
