@@ -16,7 +16,7 @@ namespace app\index\controller;
 
 use app\BaseController;
 
-class Base extends BaseController
+abstract class Base extends BaseController
 {
     /**
      * 定义业务中间件
