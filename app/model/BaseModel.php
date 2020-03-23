@@ -1180,20 +1180,25 @@ trait BaseModel
      * @param array $where 条件数组 条件闭包 或 主键id值
      * @param array $field 查询的字段数组 或 原生SQL过滤字段语句（支持原生SQL函数，此参数不传默认查询所有）
      * @param string $isOr 是否是 OR 查询 默认 AND
+     * @param bool $withSoft 是否查询包含软删除的数据
      * @param bool $isSelect 是否是 select 查询 默认 false
      * @return array|string|bool|null 返回结果数组或NULL（如果是find查询的field仅为一个字段，将直接返回该字段的值，相当于TP的value方法）
      */
-    public function findField($where = [], $field = [], string $isOr = "and", bool $isSelect = false)
+    public function findField($where = [], $field = [], string $isOr = "and", $withSoft = false, bool $isSelect = false)
     {
         try {
             if (empty($where)) {
                 $this->modelError = "where is not empty";
                 return false;
             }
-            $idName = $this->getPk();
-            $model  = $this->genBaseModel($where, $idName, $isOr);
-            $model  = $this->filterSoftDelData($model);
-            $model  = is_array($field) ? $model->field($field) : $model->fieldRaw((string)$field);
+            $idName    = $this->getPk();
+            $model     = $this->genBaseModel($where, $idName, $isOr);
+            $queryType = "excludeSoft";
+            if ($withSoft) {
+                $queryType = "withSoft";
+            }
+            $model = $this->filterSoftDelData($model, $queryType);
+            $model = is_array($field) ? $model->field($field) : $model->fieldRaw((string)$field);
             if ($isSelect) {
                 $data = $model->limit(1)->select();
                 $all  = $data ? $data->toArray() : [];
