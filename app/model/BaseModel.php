@@ -82,9 +82,22 @@ trait BaseModel
     private function hiddenField(array $data)
     {
         if (!empty($this->hidden)) {
-            foreach ($data as $key => $val) {
-                if (in_array($key, $this->hidden)) {
-                    unset($data[$key]);
+            $level = $this->arrayLevel($data);
+            if ($level == 1) {
+                foreach ($data as $key => $val) {
+                    if (in_array($key, $this->hidden)) {
+                        unset($data[$key]);
+                    }
+                }
+            } elseif ($level > 1) {
+                foreach ($data as $key => &$val) {
+                    if (is_array($val)) {
+                        foreach ($val as $k => $v) {
+                            if (in_array($k, $this->hidden)) {
+                                unset($val[$k]);
+                            }
+                        }
+                    }
                 }
             }
         }
