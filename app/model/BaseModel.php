@@ -1652,13 +1652,19 @@ trait BaseModel
      * 查询List（支持分页，支持each回调）
      *
      * @param array $where 条件数组 条件闭包（如果需要查询整张表全部数据，可以传*）
+     * @param array $order 原生排序SQL语句 或 数组 如：['price','id'=>'desc'] 生成的SQL为 ORDER BY `price`,`id` desc
      * @param callable|null $each 闭包回调函数（有些情况下我们需要对于查询出来的分页数据进行循环处理，通过each传入闭包处理函数即可）
      * @param int $pageLimit 分页每页显示记录数  默认 0 自动取 PaginateEnum 枚举类配置的条数
      * @param string $isOr 是否是 OR 查询 默认 AND
      * @return array|bool 返回 查询后的分页数据
      */
-    public function selectList($where = [], callable $each = null, int $pageLimit = 0, string $isOr = "and")
-    {
+    public function selectList(
+        $where = [],
+        $order = [],
+        callable $each = null,
+        int $pageLimit = 0,
+        string $isOr = "and"
+    ) {
         try {
             if (empty($where)) {
                 $this->modelError = "where is not empty";
@@ -1667,6 +1673,7 @@ trait BaseModel
             $idName     = $this->getPk();
             $model      = $this->genBaseModel($where, $idName, $isOr);
             $model      = $this->filterSoftDelData($model);
+            $model      = is_array($order) ? $model->order($order) : $model->orderRaw((string)$order);
             $pageConfig = $this->getPaginateConfig($pageLimit);
             if (!empty($each)) {
                 $data = $model->paginate($pageConfig, false)->each($each);
