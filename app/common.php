@@ -113,23 +113,3 @@ function checkOneRequestParam(string $paramName, string $method = "")
 //************************************ --- 其他公共方法 --- ****************************************//
 
 
-/**
- * 生成全局唯一ID（17位）【每秒能够产生26万ID左右】
- * @param int $number 指定一次性生成多少个
- * @param int $datacenterId 数据中心ID，非分布式系统默认1即可
- * @param int $workerId 工作机器ID（0-1023），非分布式系统默认1即可
- * @return array|mixed|null
- */
-function genUuid(int $number = 1, int $datacenterId = 1, int $workerId = 1)
-{
-    try {
-        $uuid      = [];
-        $snowflake = new \Godruoyi\Snowflake\Snowflake($datacenterId, $workerId);
-        for ($i = 0;$i < $number;$i++) {
-            $uuid[] = $snowflake->id();
-        }
-        return count($uuid) > 1 ? $uuid : $uuid[0];
-    } catch (\Exception $e) {
-        return null;
-    }
-}

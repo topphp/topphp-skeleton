@@ -22,7 +22,6 @@ Topphp
 * SendMsg响应信息助手类
 * 基础模型操作类
 * 支持阿里云日志
-* Snowflake雪花算法
 * 多种扩展组件支持
 
 ## 安装
@@ -107,7 +106,7 @@ TopPHP骨架已内置Top组件
        
 6、基础模型操作类
   Tips：提供模型操作的基本快捷方法，提升模型操作代码复用率，方便开发，包含如下方法：
-       a、生成数据表主键id（适用于自定义主键情况）protected genSqlId()
+       a、分页配置（用于自动构造TP6分页参数）protected getPaginateConfig()
        b、获取资源数据指定列的数组 protected getSourceColumn()
        c、数组分页 protected dataPage()
        
