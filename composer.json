@@ -19,8 +19,7 @@
     "topthink/think-annotation": "^1.0",
     "topthink/think-multi-app": "^1.0",
     "topphp/topphp-log": "^1.0",
-    "topphp/topphp-generate": "dev-master",
-    "godruoyi/php-snowflake": "^1.0"
+    "topphp/topphp-generate": "dev-master"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "^3.5",

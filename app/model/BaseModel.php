@@ -412,17 +412,6 @@ trait BaseModel
     }
 
     /**
-     * 生成数据表主键id（适用于自定义主键情况）
-     * @param int $datacenterId 数据中心ID，非分布式系统默认1即可
-     * @param int $workerId 工作机器ID（0-1023），非分布式系统默认1即可
-     * @return array|mixed|null
-     */
-    protected function genSqlId(int $datacenterId = 1, int $workerId = 1)
-    {
-        return genUuid(1, $datacenterId, $workerId);
-    }
-
-    /**
      * 获取资源数据指定列的数组
      * @param $source
      * @param string $column
