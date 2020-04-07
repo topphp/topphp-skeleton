@@ -162,16 +162,20 @@ class SendMsg
      * 发送响应数据（针对arrayData或arrayAlert方法返回的数组可以直接传给此方法进行response响应）
      * @param $sendArray
      * @param bool $isList 是否data数据返回list形式（仅data为对象或数组有效）
+     * @param int $httpCode
      * @return \think\Response
      */
-    public static function jsonSend($sendArray, $isList = false)
+    public static function jsonSend($sendArray, $isList = false, $httpCode = HttpStatusEnum::SUCCESS)
     {
         if (!is_array($sendArray)) {
             return response(self::renderArray(), HttpStatusEnum::SUCCESS, [], "json");
         }
         $sendArray = self::checkArray($sendArray, $isList);
+        if ((int)$sendArray['httpCode'] !== $httpCode && config("app.show_http_status")) {
+            $httpCode = (int)$sendArray['httpCode'];
+        }
         return response(self::renderArray($sendArray['code'], $sendArray['message'], $sendArray['data'],
-            $sendArray['httpCode']), $sendArray['httpCode'], [], 'json');
+            $sendArray['httpCode']), $httpCode, [], 'json');
     }
 
     /**
@@ -289,16 +293,20 @@ class SendMsg
      * 发送响应数据（针对arrayData或arrayAlert方法返回的数组可以直接传给此方法进行response响应）
      * @param $sendArray
      * @param bool $isList 是否data数据返回list形式
+     * @param int $httpCode
      * @return \think\Response
      */
-    public static function xmlSend($sendArray, $isList = false)
+    public static function xmlSend($sendArray, $isList = false, $httpCode = HttpStatusEnum::SUCCESS)
     {
         if (!is_array($sendArray)) {
             return response(self::renderArray(), HttpStatusEnum::SUCCESS, [], "xml");
         }
         $sendArray = self::checkArray($sendArray, $isList);
+        if ((int)$sendArray['httpCode'] !== $httpCode && config("app.show_http_status")) {
+            $httpCode = (int)$sendArray['httpCode'];
+        }
         return response(self::renderArray($sendArray['code'], $sendArray['message'], $sendArray['data'],
-            $sendArray['httpCode']), $sendArray['httpCode'], [], 'xml');
+            $sendArray['httpCode']), $httpCode, [], 'xml');
     }
 
     /**
