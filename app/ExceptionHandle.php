@@ -114,7 +114,7 @@ class ExceptionHandle extends Handle
                 return $this->sendMsg($returnData, $httpCode);
             }
         }
-        //代码异常
+        // 代码异常
         if ($e instanceof \ParseError || $e instanceof \Error || $e instanceof PDOException
             || $e instanceof HttpException || $e instanceof HttpResponseException
             || $e instanceof RouteNotFoundException || $e instanceof ErrorException
