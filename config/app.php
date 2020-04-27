@@ -24,7 +24,7 @@ return [
     // 域名绑定（自动多应用模式有效）
     'domain_bind'         => [],
     // 禁止URL访问的应用列表（自动多应用模式有效，common用于存放一些公共类文件）
-    'deny_app_list'       => ['common'],
+    'deny_app_list'       => ['common', 'behavior'],
 
     // 异常处理，接口应用配置（配置了此参数的应用，将以json code码形式返回报错信息，不会再出现TP的异常报错Trace页面）
     'exception_app_list'  => ['api'],
