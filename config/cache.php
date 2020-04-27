@@ -10,7 +10,8 @@ return [
 
     // 缓存连接方式配置
     'stores'  => [
-        'file' => [
+        // 文件缓存
+        'file'  => [
             // 驱动方式
             'type'       => 'File',
             // 缓存保存目录
@@ -23,6 +24,23 @@ return [
             'tag_prefix' => 'tag:',
             // 序列化机制 例如 ['serialize', 'unserialize']
             'serialize'  => [],
+        ],
+        // redis缓存
+        'redis' => [
+            // 驱动方式
+            'type'       => 'Redis',
+            // 服务器地址
+            'host'       => env('cache.host', '127.0.0.1'),
+            // 端口
+            'port'       => env('cache.port', '6379'),
+            // 密码
+            'password'   => env('cache.password', ''),
+            // 默认db库
+            'select'     => env('cache.select', 0),
+            // 缓存前缀
+            'prefix'     => '',
+            // 缓存标签前缀
+            'tag_prefix' => 'tag:',
         ],
         // 更多的缓存连接
     ],

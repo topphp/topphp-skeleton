@@ -1,15 +1,20 @@
 <?php
 // 事件定义文件
 return [
-    'bind'      => [
+    'bind' => [
     ],
 
-    'listen'    => [
-        'AppInit'  => [],
-        'HttpRun'  => [],
-        'HttpEnd'  => [],
-        'LogLevel' => [],
-        'LogWrite' => [],
+    'listen' => [
+        'AppInit'     => [
+            "Cache" => "app\behavior\\listener\\Cache"
+        ],
+        'HttpRun'     => [],
+        'HttpEnd'     => [],
+        'LogLevel'    => [],
+        'LogWrite'    => [],
+        'RouteLoaded' => [
+            "Cache" => "app\behavior\\listener\\Cache"
+        ],
     ],
 
     'subscribe' => [
