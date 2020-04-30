@@ -35,7 +35,7 @@ function checkOneRequestParam(string $paramName, string $method = "")
         case 'delete':
             $fieldValue = request()->delete($paramName);
             break;
-        default :
+        default:
             $fieldValue = request()->param($paramName);
     }
     $data[$paramName] = $fieldValue;
@@ -72,8 +72,10 @@ function checkOneRequestParam(string $paramName, string $method = "")
                 if (in_array($checkVersion, $versionArr)) {
                     array_shift($controllerArray);
                     if (!empty($controllerArray)) {
-                        $scene = strtolower(implode(".",
-                                $controllerArray) . "." . request()->action() . "@" . $paramName);
+                        $scene = strtolower(implode(
+                            ".",
+                            $controllerArray
+                        ) . "." . request()->action() . "@" . $paramName);
                     } else {
                         $scene = strtolower(request()->action() . "@" . $paramName);
                     }
@@ -111,5 +113,3 @@ function checkOneRequestParam(string $paramName, string $method = "")
 
 
 //************************************ --- 其他公共方法 --- ****************************************//
-
-

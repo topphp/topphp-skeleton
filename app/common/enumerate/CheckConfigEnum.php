@@ -13,7 +13,6 @@
 
 namespace app\common\enumerate;
 
-
 class CheckConfigEnum
 {
     // 设置验证器场景简化--接口版本【全小写】（key 应用名 value 接口版本）

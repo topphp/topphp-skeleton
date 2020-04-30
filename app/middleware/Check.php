@@ -21,8 +21,11 @@ class Check
     {
         // 校验操作是否存在
         $module       = app('http')->getName();
-        $operateClass = 'app\\' . $module . "\\controller\\" . preg_replace("/\./", "\\",
-                $request->controller());
+        $operateClass = 'app\\' . $module . "\\controller\\" . preg_replace(
+            "/\./",
+            "\\",
+            $request->controller()
+        );
         if (!method_exists($operateClass, $request->action())) {
             if ($request->isAjax() || $request->isPjax()) {
                 return SendMsg::jsonThrow('404 Not Found!', CommonCodeEnum::FAIL, [], 404);

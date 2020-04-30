@@ -13,7 +13,6 @@
 
 namespace app\common\enumerate;
 
-
 class PaginateEnum
 {
     // 默认每页显示条数 default
