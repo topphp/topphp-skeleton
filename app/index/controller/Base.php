@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace app\index\controller;
 
-
 use app\BaseController;
 
 abstract class Base extends BaseController
@@ -25,5 +24,4 @@ abstract class Base extends BaseController
     protected $middleware = ['Check', 'Auth'];
 
     // Index应用基础业务逻辑（所有方法需定义protected关键词）
-
 }

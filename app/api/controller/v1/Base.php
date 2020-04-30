@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace app\api\controller\v1;
 
-
 use app\BaseController;
 
 abstract class Base extends BaseController
@@ -25,5 +24,4 @@ abstract class Base extends BaseController
     protected $middleware = ['V1'];
 
     // 多版本Api应用基础业务逻辑（所有方法需定义protected关键词）
-
 }

@@ -13,7 +13,6 @@
 
 namespace app\index\validate;
 
-
 use think\Validate;
 
 class IndexCheck extends Validate

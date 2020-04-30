@@ -228,8 +228,10 @@ trait BaseModel
                 $query->whereOr($where);
             }) : static::where($pkName, $where);
         } else {
-            $model = is_array($where) || $where instanceof \Closure ? static::where($where) : static::where($pkName,
-                $where);
+            $model = is_array($where) || $where instanceof \Closure ? static::where($where) : static::where(
+                $pkName,
+                $where
+            );
         }
         return $model;
     }
@@ -316,8 +318,10 @@ trait BaseModel
                     if ($aliasStr === "this.") {
                         array_push($mainField, substr($field, 5));
                         unset($fields[$k]);
-                    } elseif (!preg_match("/\./", $field) && isset($this->schema) && in_array($field,
-                            array_keys($this->schema))) {
+                    } elseif (!preg_match("/\./", $field) && isset($this->schema) && in_array(
+                        $field,
+                        array_keys($this->schema)
+                    )) {
                         // 区分是否是主表字段
                         array_push($mainField, $field);
                         unset($fields[$k]);
@@ -1022,8 +1026,10 @@ trait BaseModel
                         $delNum = $data->count();
                         $data->delete();
                         return $delNum;
-                    } elseif (isset($this->schema[$deleteTimeField]) && in_array($this->schema[$deleteTimeField],
-                            $dbTimeType)) {
+                    } elseif (isset($this->schema[$deleteTimeField]) && in_array(
+                        $this->schema[$deleteTimeField],
+                        $dbTimeType
+                    )) {
                         $time = $this->genDateTime($this->schema[$deleteTimeField]);
                     } elseif (isset($this->schema['delete_time'])) {
                         $deleteTimeField = 'delete_time';
@@ -1104,8 +1110,10 @@ trait BaseModel
                         $delNum = $data->count();
                         $data->delete();
                         return $delNum;
-                    } elseif (isset($this->schema[$deleteTimeField]) && in_array($this->schema[$deleteTimeField],
-                            $dbTimeType)) {
+                    } elseif (isset($this->schema[$deleteTimeField]) && in_array(
+                        $this->schema[$deleteTimeField],
+                        $dbTimeType
+                    )) {
                         $time = $this->genDateTime($this->schema[$deleteTimeField]);
                     } elseif (isset($this->schema['delete_time'])) {
                         $deleteTimeField = 'delete_time';
@@ -1817,8 +1825,12 @@ trait BaseModel
                         $className = "app\\model\\entity\\" . ucfirst($this->toHumpScore($tb));
                         if (class_exists($className)) {
                             ${$tb . "Class"} = new $className;
-                            $model           = $this->filterSoftDelData($model, "excludeSoft", $tbAlias,
-                                ${$tb . "Class"});
+                            $model           = $this->filterSoftDelData(
+                                $model,
+                                "excludeSoft",
+                                $tbAlias,
+                                ${$tb . "Class"}
+                            );
                         }
                     }
                 }
@@ -2031,8 +2043,10 @@ trait BaseModel
                             if ($aliasStr === "this.") {
                                 array_push($mainField, substr($field, 5));
                                 unset($fields[$k]);
-                            } elseif (!preg_match("/\./", $field) && isset($this->schema) && in_array($field,
-                                    array_keys($this->schema))) {
+                            } elseif (!preg_match("/\./", $field) && isset($this->schema) && in_array(
+                                $field,
+                                array_keys($this->schema)
+                            )) {
                                 // 区分是否是主表字段
                                 array_push($mainField, $field);
                                 unset($fields[$k]);

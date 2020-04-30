@@ -13,7 +13,6 @@
 
 namespace app\index\service;
 
-
 class DemoService
 {
 

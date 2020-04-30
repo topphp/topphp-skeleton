@@ -24,20 +24,20 @@ use think\Model;
  */
 class Demo extends Model
 {
-	use BaseModel;
+    use BaseModel;
 
-	protected $pk = 'id';
+    protected $pk = 'id';
 
-	protected $table = 'topphp_demo';
+    protected $table = 'topphp_demo';
 
-	protected $schema = [
-		'id' => 'int',
-		'user_name' => 'varchar',
-		'password' => 'varchar',
-		'email' => 'varchar',
-		'tel' => 'varchar',
-		'create_time' => 'timestamp',
-		'update_time' => 'timestamp',
-		'delete_time' => 'timestamp',
-	];
+    protected $schema = [
+        'id' => 'int',
+        'user_name' => 'varchar',
+        'password' => 'varchar',
+        'email' => 'varchar',
+        'tel' => 'varchar',
+        'create_time' => 'timestamp',
+        'update_time' => 'timestamp',
+        'delete_time' => 'timestamp',
+    ];
 }

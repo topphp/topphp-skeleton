@@ -13,7 +13,6 @@
 
 namespace app\common\enumerate;
 
-
 class CommonCodeEnum
 {
     // 全局公共成功Code码（默认10000，不推荐设为1）

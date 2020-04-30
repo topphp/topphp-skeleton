@@ -17,6 +17,7 @@ class Cache
      */
     public function handle(Event $event)
     {
+        // 默认缓存自动识别处理
         $driver = config("cache.default");
         if ($driver === 'redis' && extension_loaded('redis')) {
             // redis配置信息
@@ -42,6 +43,18 @@ class Cache
                     'default' => $driver
                 ];
                 Config::set($defaultConfig, "cache");
+            }
+        }
+        //注解中间件兼容性处理
+        if (empty(request()->action()) && !empty(request()->pathinfo())) {
+            $pathinfo      = request()->pathinfo();
+            $pathinfoArray = @explode("/", $pathinfo);
+            $action        = end($pathinfoArray);
+            if (preg_match("/\./", $action)) {
+                $name = current(@explode(".", $action));
+                request()->setAction($name);
+            } else {
+                request()->setAction($action);
             }
         }
         // 其他处理

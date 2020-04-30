@@ -13,7 +13,6 @@
 
 namespace app\common\enumerate;
 
-
 class HttpStatusEnum
 {
     //success 成功
