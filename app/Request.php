@@ -42,8 +42,10 @@ class Request extends \think\Request
             $action        = end($pathinfoArray);
             if (preg_match("/\./", $action)) {
                 $name = current(@explode(".", $action));
-                $this->setAction($name);
+            } else {
+                $name = $action;
             }
+            $this->setAction($name);
         }
         return $convert ? strtolower($name) : $name;
     }
