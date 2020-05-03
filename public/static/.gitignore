@@ -1,2 +1,4 @@
-*
+**/install/*
+!**/install/css
+!**/install/images
 !.gitignore
