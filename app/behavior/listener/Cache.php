@@ -31,7 +31,9 @@ class Cache
                 }
                 $res = $redis->ping();
                 if ($res === '+PONG') {
-                    Config::set($redisConfig, "cache.stores.redis");
+                    $configCache                    = config("cache");
+                    $configCache['stores']['redis'] = $redisConfig;
+                    Config::set($configCache, "cache");
                 }
             } catch (\Exception $e) {
                 // 不正常自动切换成文件缓存
