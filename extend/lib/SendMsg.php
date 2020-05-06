@@ -13,12 +13,13 @@
 
 namespace lib;
 
-
 use app\common\enumerate\CommonCodeEnum;
 use app\common\enumerate\HttpStatusEnum;
 
 class SendMsg
 {
+    private static $headers = [];
+
     /**
      * 返回 code 数组
      * @param int $code
@@ -149,6 +150,9 @@ class SendMsg
                 'data'       => $data,
                 'StatusCode' => $httpCode,
             ];
+            if (!empty(self::$headers)) {
+                $param['headers'] = self::$headers;
+            }
             // 注意：1、如果代码被try catch捕获，将不会强制终止代码向后执行
             //      2、这是基础php编程特性，一个好的编码习惯，业务逻辑就应该尽量不使用强制抛出，而是逐层返回
             throw new TopException($param);
@@ -174,8 +178,12 @@ class SendMsg
         if ((int)$sendArray['httpCode'] !== $httpCode && config("app.show_http_status")) {
             $httpCode = (int)$sendArray['httpCode'];
         }
-        return response(self::renderArray($sendArray['code'], $sendArray['message'], $sendArray['data'],
-            $sendArray['httpCode']), $httpCode, [], 'json');
+        return response(self::renderArray(
+            $sendArray['code'],
+            $sendArray['message'],
+            $sendArray['data'],
+            $sendArray['httpCode']
+        ), $httpCode, [], 'json');
     }
 
     /**
@@ -287,6 +295,51 @@ class SendMsg
         return response(self::arrayAlert($code, $message, $data, true, $httpCode), $httpCode, $headers, $type);
     }
 
+    /**
+     * 重定向跳转（兼容swoole http服务）
+     * @param string $url
+     * @param int $httpCode
+     * @param array $headers
+     * @return \think\Response
+     * @throws TopException
+     */
+    public static function jsonJump(
+        $url = "",
+        $httpCode = HttpStatusEnum::REDIRECT,
+        $headers = []
+    ) {
+        $code = CommonCodeEnum::SUCCESS;
+        switch (strtolower(config("app.default_ajax_return"))) {
+            case "jsonp":
+                $type = "jsonp";
+                break;
+            case "xml":
+                $type = "xml";
+                break;
+            default:
+                $type = "json";
+        }
+        if (empty($url)) {
+            return response(self::arrayAlert($code, "redirect", [], true, $httpCode), $httpCode, $headers, $type);
+        }
+        $preg = "/^http(s)?:\\/\\/.+/";
+        $url  = preg_match($preg, $url) ? $url : url($url);
+        if (!preg_match("/Swoole/", request()->server("SERVER_SOFTWARE"))) {
+            header("Location: " . $url);
+            return response(
+                self::arrayAlert($code, "redirect: " . $url, [], true, $httpCode),
+                $httpCode,
+                $headers,
+                $type
+            );
+        } else {
+            $headerLocation['Location'] = $url;
+            $headers                    = array_merge($headers, $headerLocation);
+            self::$headers              = $headers;
+        }
+        return response(self::arrayAlert($code, "redirect", [], true, $httpCode), $httpCode, $headers, $type);
+    }
+
     //--------------------- 助手xml方法 ---------------------//
 
     /**
@@ -305,8 +358,12 @@ class SendMsg
         if ((int)$sendArray['httpCode'] !== $httpCode && config("app.show_http_status")) {
             $httpCode = (int)$sendArray['httpCode'];
         }
-        return response(self::renderArray($sendArray['code'], $sendArray['message'], $sendArray['data'],
-            $sendArray['httpCode']), $httpCode, [], 'xml');
+        return response(self::renderArray(
+            $sendArray['code'],
+            $sendArray['message'],
+            $sendArray['data'],
+            $sendArray['httpCode']
+        ), $httpCode, [], 'xml');
     }
 
     /**
@@ -376,5 +433,41 @@ class SendMsg
         $headers = []
     ) {
         return response(self::arrayAlert($code, $message, $data, true, $httpCode), $httpCode, $headers, 'xml');
+    }
+
+    /**
+     * 重定向跳转（兼容swoole http服务）
+     * @param string $url
+     * @param int $httpCode
+     * @param array $headers
+     * @return \think\Response
+     * @throws TopException
+     */
+    public static function xmlJump(
+        $url = "",
+        $httpCode = HttpStatusEnum::REDIRECT,
+        $headers = []
+    ) {
+        $code = CommonCodeEnum::SUCCESS;
+        $type = "xml";
+        if (empty($url)) {
+            return response(self::arrayAlert($code, "redirect", [], true, $httpCode), $httpCode, $headers, $type);
+        }
+        $preg = "/^http(s)?:\\/\\/.+/";
+        $url  = preg_match($preg, $url) ? $url : url($url);
+        if (!preg_match("/Swoole/", request()->server("SERVER_SOFTWARE"))) {
+            header("Location: " . $url);
+            return response(
+                self::arrayAlert($code, "redirect: " . $url, [], true, $httpCode),
+                $httpCode,
+                $headers,
+                $type
+            );
+        } else {
+            $headerLocation['Location'] = $url;
+            $headers                    = array_merge($headers, $headerLocation);
+            self::$headers              = $headers;
+        }
+        return response(self::arrayAlert($code, "redirect", [], true, $httpCode), $httpCode, $headers, $type);
     }
 }
