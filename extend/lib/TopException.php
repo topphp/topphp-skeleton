@@ -21,6 +21,7 @@ class TopException extends \Exception
     public $message = 'System exception';
     public $httpCode = HttpStatusEnum::SERVER_ERROR;
     public $topData = [];
+    public $topHeaders = [];
 
     public function __construct($params = [])
     {
@@ -50,6 +51,9 @@ class TopException extends \Exception
             }
             if (array_key_exists('StatusCode', $params)) {
                 $this->httpCode = $params['StatusCode'];
+            }
+            if (array_key_exists('headers', $params)) {
+                $this->topHeaders = $params['headers'];
             }
         }
         parent::__construct($this->message, $this->code);

@@ -95,11 +95,12 @@ class ExceptionHandle extends Handle
             $tmpl = app()->getThinkPath() . 'tpl/think_exception.tpl';
             Config::set(['exception_tmpl' => $tmpl], 'app');
         }
-        $abnormity = false;
-        $code      = $e->getCode();
-        $message   = $e->getMessage();
-        $httpCode  = isset($e->httpCode) ? $e->httpCode : HttpStatusEnum::SERVER_ERROR;
-        $topData   = isset($e->topData) ? $e->topData : [];
+        $abnormity  = false;
+        $code       = $e->getCode();
+        $message    = $e->getMessage();
+        $httpCode   = isset($e->httpCode) ? $e->httpCode : HttpStatusEnum::SERVER_ERROR;
+        $topData    = isset($e->topData) ? $e->topData : [];
+        $topHeaders = isset($e->topHeaders) ? $e->topHeaders : [];
         // 参数验证错误（使用注解验证器有效）
         if ($e instanceof ValidateException) {
             $message  = $e->getError();
@@ -107,11 +108,11 @@ class ExceptionHandle extends Handle
             if (is_array($message)) {
                 foreach ($message as $filed => $msg) {
                     $returnData = $this->createReturn($request, CommonCodeEnum::FAIL, $msg, $topData, $httpCode);
-                    return $this->sendMsg($returnData, $httpCode);
+                    return $this->sendMsg($returnData, $httpCode, $topHeaders);
                 }
             } elseif (is_string($message)) {
                 $returnData = $this->createReturn($request, CommonCodeEnum::FAIL, $message, $topData, $httpCode);
-                return $this->sendMsg($returnData, $httpCode);
+                return $this->sendMsg($returnData, $httpCode, $topHeaders);
             }
         }
         // 代码异常
@@ -139,7 +140,7 @@ class ExceptionHandle extends Handle
             config("app.exception_app_list")
         )) {
             $returnData = $this->createReturn($request, $code, $message, $topData, $httpCode, $abnormity);
-            return $this->sendMsg($returnData, $httpCode);
+            return $this->sendMsg($returnData, $httpCode, $topHeaders);
         }
         // 其他错误交给系统处理
         return parent::render($request, $e);
@@ -171,7 +172,7 @@ class ExceptionHandle extends Handle
         return $returnData;
     }
 
-    private function sendMsg($data, $httpCode)
+    private function sendMsg($data, $httpCode, $headers = [])
     {
         switch (strtolower(config("app.default_ajax_return"))) {
             case "jsonp":
@@ -183,6 +184,6 @@ class ExceptionHandle extends Handle
             default:
                 $type = "json";
         }
-        return response($data, $httpCode, [], $type);
+        return response($data, $httpCode, $headers, $type);
     }
 }
