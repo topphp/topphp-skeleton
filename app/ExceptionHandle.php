@@ -53,30 +53,32 @@ class ExceptionHandle extends Handle
     {
         $defaultLog = config("log.default");
         $channels   = config("log.channels");
-        if (isset($channels[$defaultLog]['type']) && $channels[$defaultLog]['type'] == "Aliyun") {
-            // 使用阿里云日志记录异常信息
-            if (!$this->isIgnoreReport($exception)) {
-                // 收集异常数据
-                $data = [
-                    'file'    => $exception->getFile(),
-                    'line'    => $exception->getLine(),
-                    'message' => $this->getMessage($exception),
-                    'code'    => $this->getCode($exception),
-                ];
-                $log  = "[{$data['code']}]{$data['message']}[{$data['file']}:{$data['line']}]";
+        if ($exception->getCode() != 10000) {
+            if (isset($channels[$defaultLog]['type']) && $channels[$defaultLog]['type'] == "Aliyun") {
+                // 使用阿里云日志记录异常信息
+                if (!$this->isIgnoreReport($exception)) {
+                    // 收集异常数据
+                    $data = [
+                        'file'    => $exception->getFile(),
+                        'line'    => $exception->getLine(),
+                        'message' => $this->getMessage($exception),
+                        'code'    => $this->getCode($exception),
+                    ];
+                    $log  = "[{$data['code']}]{$data['message']}[{$data['file']}:{$data['line']}]";
 
-                if ($this->app->config->get('log.record_trace') && $this->app->isDebug()) {
-                    $log .= PHP_EOL . $exception->getTraceAsString();
-                }
+                    if ($this->app->config->get('log.record_trace') && $this->app->isDebug()) {
+                        $log .= PHP_EOL . $exception->getTraceAsString();
+                    }
 
-                try {
-                    Log::write($log, "error", "系统错误");
-                } catch (\Exception $e) {
+                    try {
+                        Log::write($log, "error", "系统错误");
+                    } catch (\Exception $e) {
+                    }
                 }
+            } else {
+                // 使用内置的方式记录异常日志
+                parent::report($exception);
             }
-        } else {
-            // 使用内置的方式记录异常日志
-            parent::report($exception);
         }
     }
 
@@ -136,9 +138,9 @@ class ExceptionHandle extends Handle
         }
         $appName = app('http')->getName();
         if ($request->isAjax() || $request->isPjax() || isset($e->httpCode) || in_array(
-            $appName,
-            config("app.exception_app_list")
-        )) {
+                $appName,
+                config("app.exception_app_list")
+            )) {
             $returnData = $this->createReturn($request, $code, $message, $topData, $httpCode, $abnormity);
             return $this->sendMsg($returnData, $httpCode, $topHeaders);
         }
