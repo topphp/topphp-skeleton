@@ -106,7 +106,7 @@ class Check
                 if ($validateRes !== true) {
                     $errorMsg = $validate->getError();
                     $errorMsg = $this->checkCode($errorMsg);
-                    return SendMsg::jsonThrow($errorMsg['msg'], $errorMsg['code']);
+                    return SendMsg::jsonThrow($errorMsg['message'], $errorMsg['code']);
                 }
             }
         }
@@ -118,12 +118,12 @@ class Check
     {
         $returnError = [
             "code" => CommonCodeEnum::FAIL,
-            "msg"  => "fail"
+            "message"  => "fail"
         ];
         if (is_array($errorMsg)) {
             $returnError = array_merge($returnError, $errorMsg);
         } else {
-            $returnError['msg'] = $errorMsg;
+            $returnError['message'] = $errorMsg;
         }
         return $returnError;
     }

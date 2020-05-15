@@ -94,15 +94,15 @@ function checkOneRequestParam(string $paramName, string $method = "")
             $errorMsg    = $validate->getError();
             $returnError = [
                 "code" => \app\common\enumerate\CommonCodeEnum::FAIL,
-                "msg"  => "fail"
+                "message"  => "fail"
             ];
             if (is_array($errorMsg)) {
                 $returnError = array_merge($returnError, $errorMsg);
             } else {
-                $returnError['msg'] = $errorMsg;
+                $returnError['message'] = $errorMsg;
             }
             // code码形式的返回
-            return \lib\SendMsg::jsonThrow($returnError['msg'], $returnError['code']);
+            return \lib\SendMsg::jsonThrow($returnError['message'], $returnError['code']);
         }
     } else {
         // 验证类不存在
