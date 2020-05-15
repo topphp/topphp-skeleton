@@ -20,19 +20,19 @@ function checkOneRequestParam(string $paramName, string $method = "")
     $fieldValue = null;
     $data       = [];
     switch (strtolower($method)) {
-        case 'get':
+        case \app\common\enumerate\MethodEnum::GET:
             $fieldValue = request()->get($paramName);
             break;
-        case 'post':
+        case \app\common\enumerate\MethodEnum::POST:
             $fieldValue = request()->post($paramName);
             break;
-        case 'put':
+        case \app\common\enumerate\MethodEnum::PUT:
             $fieldValue = request()->put($paramName);
             break;
-        case 'patch':
+        case \app\common\enumerate\MethodEnum::PATCH:
             $fieldValue = request()->patch($paramName);
             break;
-        case 'delete':
+        case \app\common\enumerate\MethodEnum::DELETE:
             $fieldValue = request()->delete($paramName);
             break;
         default:
@@ -73,9 +73,9 @@ function checkOneRequestParam(string $paramName, string $method = "")
                     array_shift($controllerArray);
                     if (!empty($controllerArray)) {
                         $scene = strtolower(implode(
-                            ".",
-                            $controllerArray
-                        ) . "." . request()->action() . "@" . $paramName);
+                                ".",
+                                $controllerArray
+                            ) . "." . request()->action() . "@" . $paramName);
                     } else {
                         $scene = strtolower(request()->action() . "@" . $paramName);
                     }
@@ -93,8 +93,8 @@ function checkOneRequestParam(string $paramName, string $method = "")
         if ($validateRes !== true) {
             $errorMsg    = $validate->getError();
             $returnError = [
-                "code" => \app\common\enumerate\CommonCodeEnum::FAIL,
-                "message"  => "fail"
+                "code"    => \app\common\enumerate\CommonCodeEnum::FAIL,
+                "message" => "fail"
             ];
             if (is_array($errorMsg)) {
                 $returnError = array_merge($returnError, $errorMsg);

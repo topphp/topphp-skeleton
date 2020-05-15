@@ -47,7 +47,7 @@ class IndexCheck extends Validate
      * 定义验证场景【key全小写，单独验证某个字段的写法：操作方法名(actionName)@字段名 => ['字段验证规则key']，注意 @ 后字段名区分大小写】
      * 格式：'v2.操作方法名(actionName)'    =>    ['字段1','字段2'...]
      *       说明：配置了CheckConfigEnum中的验证器场景简化后，可省略版本号，骨架已自带配置好了
-     * 单独验证：配置好单独验证的场景【"index@username"=>['username']】后，直接在控制器调用 checkOneRequestParam("username","post"); 方法即可
+     * 单独验证：配置好单独验证的场景【"index@username"=>['username']】后，直接在控制器调用 checkOneRequestParam("username",MethodEnum::POST); 方法即可
      *
      * @var array
      */
