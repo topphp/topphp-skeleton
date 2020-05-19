@@ -7,11 +7,10 @@
 /**
  * Description - MethodEnum.php
  *
- * RestFul请求方法枚举
+ * 方法枚举
  */
 
 namespace app\common\enumerate;
-
 
 class MethodEnum
 {
@@ -20,4 +19,13 @@ class MethodEnum
     const GET = "get";
     const DELETE = "delete";
     const PATCH = "patch";
+
+
+
+    // 排除软删除
+    const EXCLUDE_SOFT = "excludeSoft";
+    // 包含软删除
+    const WITH_SOFT = "withSoft";
+    // 只查软删除
+    const ONLY_SOFT = "onlySoft";
 }
