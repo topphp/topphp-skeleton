@@ -73,9 +73,9 @@ class Check
         $validateName = '\app\\' . $module . '\validate\\' . $validateDir . $controllerName . "Check";
         if (class_exists($validateName)) {
             // 验证器白名单校验（支持通配符设置）
-            $operateToModule     = strtolower($module . "/*/*");
-            $operateToController = strtolower($module . "/" . $request->controller() . "/*");
-            $operateToAction     = strtolower($module . "/" . $request->controller() . "/" . $request->action());
+            $operateToModule     = $module . "/*/*";
+            $operateToController = $module . "/" . $request->controller() . "/*";
+            $operateToAction     = $module . "/" . $request->controller() . "/" . $request->action();
             if (!in_array($operateToModule, CheckConfigEnum::CHECK_WHITE_LIST)
                 && !in_array($operateToController, CheckConfigEnum::CHECK_WHITE_LIST)
                 && !in_array($operateToAction, CheckConfigEnum::CHECK_WHITE_LIST)) {
@@ -83,7 +83,7 @@ class Check
                 $validate = new $validateName();
                 if (empty($layeredName)) {
                     // 非多层级控制器验证
-                    $validateRes = $validate->scene(strtolower($request->action()))->check($data);
+                    $validateRes = $validate->scene($request->action())->check($data);
                 } else {
                     // 多层级控制器验证（层级简化判断）
                     $versionArr = isset(CheckConfigEnum::API_VERSION_LIST[$module]) ? CheckConfigEnum::API_VERSION_LIST[$module] : [];
@@ -91,16 +91,16 @@ class Check
                         if (in_array($checkVersion, $versionArr)) {
                             array_shift($controllerArray);
                             if (!empty($controllerArray)) {
-                                $scene = strtolower(implode(".", $controllerArray) . "." . $request->action());
+                                $scene = implode(".", $controllerArray) . "." . $request->action();
                             } else {
-                                $scene = strtolower($request->action());
+                                $scene = $request->action();
                             }
                             $validateRes = $validate->scene($scene)->check($data);
                         } else {
-                            $validateRes = $validate->scene(strtolower($layeredName . "." . $request->action()))->check($data);
+                            $validateRes = $validate->scene($layeredName . "." . $request->action())->check($data);
                         }
                     } else {
-                        $validateRes = $validate->scene(strtolower($layeredName . "." . $request->action()))->check($data);
+                        $validateRes = $validate->scene($layeredName . "." . $request->action())->check($data);
                     }
                 }
                 if ($validateRes !== true) {

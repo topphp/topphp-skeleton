@@ -61,29 +61,29 @@ function checkOneRequestParam(string $paramName, string $method = "")
         // 此处忽略验证器白名单，直接强制验证
         $validate = new $validateName();
         if (empty($layeredName)) {
-            $scene = strtolower(request()->action()) . "@" . $paramName;
+            $scene = request()->action() . "@" . $paramName;
             if (!$validate->hasScene($scene)) {
                 return \lib\SendMsg::jsonThrow("Validation scene( {$scene} ) does not exist, Please configure");
             }
-            $validateRes = $validate->scene(strtolower(request()->action()) . "@" . $paramName)->check($data);
+            $validateRes = $validate->scene(request()->action() . "@" . $paramName)->check($data);
         } else {
             $versionArr = isset(CheckConfigEnum::API_VERSION_LIST[$module]) ? CheckConfigEnum::API_VERSION_LIST[$module] : [];
             if (!empty($versionArr) && is_array($versionArr)) {
                 if (in_array($checkVersion, $versionArr)) {
                     array_shift($controllerArray);
                     if (!empty($controllerArray)) {
-                        $scene = strtolower(implode(
-                                ".",
-                                $controllerArray
-                            ) . "." . request()->action() . "@" . $paramName);
+                        $scene = implode(
+                            ".",
+                            $controllerArray
+                        ) . "." . request()->action() . "@" . $paramName;
                     } else {
-                        $scene = strtolower(request()->action() . "@" . $paramName);
+                        $scene = request()->action() . "@" . $paramName;
                     }
                 } else {
-                    $scene = strtolower($layeredName . "." . request()->action()) . "@" . $paramName;
+                    $scene = $layeredName . "." . request()->action() . "@" . $paramName;
                 }
             } else {
-                $scene = strtolower($layeredName . "." . request()->action()) . "@" . $paramName;
+                $scene = $layeredName . "." . request()->action() . "@" . $paramName;
             }
             if (!$validate->hasScene($scene)) {
                 return \lib\SendMsg::jsonThrow("Validation scene( {$scene} ) does not exist, Please configure");
