@@ -21,11 +21,11 @@ class PaginateEnum
 
         // 注意：如果是多层级或多版本控制器，请务必按照规范填写全控制器，如 api/v1.index/index 或 index/layered.index/index，否则将不生效，会自动使用默认的
 
-        // 应用名/控制器名/操作名【全小写】 =》 每页显示条数（支持通配符设置全控制器通用--应用名/控制器名/*）
+        // 应用名/控制器名/操作名 =》 每页显示条数（支持通配符设置全控制器通用--应用名/控制器名/*）
 
         //--- api 应用 ---//
-        "api/v1.index/index" => 10, // index
-        "api/v2.index/index" => 10, // index
+        "api/v1.Index/index" => 10, // index
+        "api/v2.Index/index" => 10, // index
 
     ];
 }

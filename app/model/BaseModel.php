@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace app\model;
 
+use app\common\enumerate\MethodEnum;
 use app\common\enumerate\PaginateEnum;
 use ReflectionClass;
 use think\facade\Db;
@@ -208,7 +209,7 @@ trait BaseModel
 
     /**
      * 构建Model
-     * @param $where
+     * @param array|string|int|callable $where
      * @param string $pkName
      * @param string $isOr
      * @return \think\Model
@@ -247,7 +248,7 @@ trait BaseModel
      */
     private function filterSoftDelData(
         $model,
-        string $queryType = "excludeSoft",
+        string $queryType = MethodEnum::EXCLUDE_SOFT,
         string $alias = '',
         $relationModel = null
     ) {
@@ -272,9 +273,9 @@ trait BaseModel
         }
         return empty($deleteTimeField) ? $model : $model->where(function ($query) use ($deleteTimeField, $queryType) {
             switch ($queryType) {
-                case "withSoft":
+                case MethodEnum::WITH_SOFT:
                     break;
-                case "onlySoft":
+                case MethodEnum::ONLY_SOFT:
                     $query->whereNotNull($deleteTimeField);
                     break;
                 default:
@@ -286,8 +287,8 @@ trait BaseModel
 
     /**
      * base join
-     * @param array $where
-     * @param $fields
+     * @param array|string|int|callable $where
+     * @param string|array $fields
      * @param array $join
      * @param string $isOr
      * @param string $type
@@ -437,7 +438,7 @@ trait BaseModel
      */
     protected function getPaginateConfig($pageLimit = 0)
     {
-        if ($pageLimit === 0) {
+        if ((int)$pageLimit <= 0) {
             $app                 = app('http')->getName();
             $controller          = request()->controller();
             $action              = request()->action();
@@ -679,8 +680,8 @@ trait BaseModel
     /**
      * 更新指定字段值（支持主键更新）
      *
-     * @param array $where 条件数组 或 主键id值
-     * @param string $field 字段名 或 字段数组[field1=>value1, field2=>value2]
+     * @param array|string|int|callable $where 条件数组 或 主键id值
+     * @param string|array $field 字段名 或 字段数组[field1=>value1, field2=>value2]
      * @param null|string $value 字段值（更新单一字段时有效）
      * @return bool
      */
@@ -715,7 +716,7 @@ trait BaseModel
     /**
      * 指定字段自增（支持主键查询）
      *
-     * @param array $where 条件数组 或 主键id值
+     * @param array|string|int|callable $where 条件数组 或 主键id值
      * @param string $field 字段名
      * @param int|float $step 自增/步进值 默认1
      * @return bool
@@ -755,7 +756,7 @@ trait BaseModel
     /**
      * 指定字段自减（支持主键查询）
      *
-     * @param array $where 条件数组 或 主键id值
+     * @param array|string|int|callable $where 条件数组 或 主键id值
      * @param string $field 字段名
      * @param int|float $step 自增/步进值 默认1
      * @return bool
@@ -795,7 +796,7 @@ trait BaseModel
     /**
      * 指定字段自增/自减（支持主键查询，支持多字段步进处理）
      *
-     * @param array $where 条件数组 或 主键id值
+     * @param array|string|int|callable $where 条件数组 或 主键id值
      * @param array $fields 字段二维数组 [[field1,inc,step1],[field2,dec,step2]]
      * @return bool
      */
@@ -864,8 +865,8 @@ trait BaseModel
     /**
      * 多条件批量更新（支持主键批量更新）
      *
-     * @param array $where 1、条件数组 条件闭包 或 主键id值【多条件批量更新】
-     *                     2、带主键id的待更新二维数组（data不传时有效）【主键批量更新】
+     * @param array|string|int|callable $where 1、条件数组 条件闭包 或 主键id值【多条件批量更新】
+     *                                         2、带主键id的待更新二维数组（data不传时有效）【主键批量更新】
      *
      * @param array $data 1、需要更新的字段键值对数组['field1'=>'value1','field2'=>'value2'] 【多条件批量更新】
      *                    2、不传【主键批量更新】
@@ -986,7 +987,7 @@ trait BaseModel
     /**
      * 删除数据（支持主键删除，支持多条件删除，支持软删除）
      *
-     * @param array $where 条件数组 条件闭包 或 主键id值
+     * @param array|string|int|callable $where 条件数组 条件闭包 或 主键id值
      *
      * @param bool $isTrueDel 是否是真删除 默认 false
      *                     软删除说明：1、优先根据对应的模型层配置的软删除字段名 protected $deleteTime = 'delete_time' 判断；
@@ -1165,12 +1166,12 @@ trait BaseModel
      *       我们只需要在对应的Model使用 $this->queryChain() 开头进行链式操作，即可自动过滤软删除数据；
      *       同样还提供 queryType 类型参数来帮助我们判断过滤条件
      *
-     * @param array $where 条件数组 条件闭包 或 主键id值
+     * @param array|string|int|callable $where 条件数组 条件闭包 或 主键id值
      * @param string $isOr 是否是 OR 查询 默认 AND
      * @param string $queryType 过滤条件 excludeSoft（默认排除软删除数据）withSoft（包含软删除数据）onlySoft（仅查询软删除数据）
      * @return bool|\think\Model 返回当前Model对象，可使用TP的链式操作继续构造查询
      */
-    public function queryChain($where = [], string $isOr = "and", string $queryType = "excludeSoft")
+    public function queryChain($where = [], string $isOr = "and", string $queryType = MethodEnum::EXCLUDE_SOFT)
     {
         try {
             $idName = $this->getPk();
@@ -1187,7 +1188,7 @@ trait BaseModel
     /**
      * 查询字段值（支持主键查询，支持select查询返回二维数组，默认find查询）
      *
-     * @param array $where 条件数组 条件闭包 或 主键id值
+     * @param array|string|int|callable $where 条件数组 条件闭包 或 主键id值
      * @param array $field 查询的字段数组 或 原生SQL过滤字段语句（支持原生SQL函数，此参数不传默认查询所有）
      * @param string $isOr 是否是 OR 查询 默认 AND
      * @param bool $withSoft 是否查询包含软删除的数据
@@ -1203,9 +1204,9 @@ trait BaseModel
             }
             $idName    = $this->getPk();
             $model     = $this->genBaseModel($where, $idName, $isOr);
-            $queryType = "excludeSoft";
+            $queryType = MethodEnum::EXCLUDE_SOFT;
             if ($withSoft) {
-                $queryType = "withSoft";
+                $queryType = MethodEnum::WITH_SOFT;
             }
             $model = $this->filterSoftDelData($model, $queryType);
             $model = is_array($field) ? $model->field($field) : $model->fieldRaw((string)$field);
@@ -1230,7 +1231,7 @@ trait BaseModel
     /**
      * 查询一条（支持主键查询，支持select查询返回二维数组，默认select查询）
      *
-     * @param array $where 条件数组 条件闭包 或 主键id值
+     * @param array|string|int|callable $where 条件数组 条件闭包 或 主键id值
      * @param string $isOr 是否是 OR 查询 默认 AND
      * @param bool $isSelect 是否是 select 查询 默认 true
      * @return array|bool|null 返回结果数组或NULL
@@ -1267,7 +1268,7 @@ trait BaseModel
      *       我们就可以使用$withoutField参数传入需要排除的字段
      *       注意：字段排除功能不支持跨表和join操作。
      *
-     * @param array $where 条件数组 条件闭包 或 主键id值
+     * @param array|string|int|callable $where 条件数组 条件闭包 或 主键id值
      * @param array $withoutField 需要排除的字段名（支持数组或字符串"field1,field2"形式）
      * @param string $isOr 是否是 OR 查询 默认 AND
      * @param bool $isModel 是否返回Model对象（默认 false ，一般此查询用于查全部数据的，我们已经提供了带分页的查询快捷方法 selectList）
@@ -1300,7 +1301,7 @@ trait BaseModel
     /**
      * 查询排序（支持主键查询，支持原生SQL语句Order排序，支持Limit限制条数）
      *
-     * @param array $where 条件数组 条件闭包 或 主键id值
+     * @param array|string|int|callable $where 条件数组 条件闭包 或 主键id值
      * @param array $order 原生排序SQL语句 或 数组 如：['price','id'=>'desc'] 生成的SQL为 ORDER BY `price`,`id` desc
      * @param string $limit 限制条数 默认 * 不限制
      * @param string $isOr 是否是 OR 查询 默认 AND
@@ -1338,7 +1339,7 @@ trait BaseModel
     /**
      * 查询首条数据（支持前Limit条）
      *
-     * @param array $where 条件数组 条件闭包 或 主键id值（如果需要查询整张表全部数据的首条，可以传*）
+     * @param array|string|int|callable $where 条件数组 条件闭包 或 主键id值（如果需要查询整张表全部数据的首条，可以传*）
      * @param int $limit 限制条数 默认 1
      * @param string $isOr 是否是 OR 查询 默认 AND
      * @return array|bool 返回首条数据或前N条数据，如果Limit一条数据将直接返回该条数据的值
@@ -1373,7 +1374,7 @@ trait BaseModel
     /**
      * 查询最后一条数据（支持后Limit条）
      *
-     * @param array $where 条件数组 条件闭包 或 主键id值（如果需要查询整张表全部数据的最后一条，可以传*）
+     * @param array|string|int|callable $where 条件数组 条件闭包 或 主键id值（如果需要查询整张表全部数据的最后一条，可以传*）
      * @param int $limit 限制条数 默认 1
      * @param string $isOr 是否是 OR 查询 默认 AND
      * @return array|bool 返回结果的最后一条数据或后N条数据，如果Limit一条数据将直接返回该条数据的值
@@ -1411,7 +1412,7 @@ trait BaseModel
     /**
      * 满足条件的数据随机返回（支持随机取Limit条）
      *
-     * @param array $where 条件数组 条件闭包 或 主键id值（如果需要查询整张表全部数据的随机条数，可以传*）
+     * @param array|string|int|callable $where 条件数组 条件闭包 或 主键id值（如果需要查询整张表全部数据的随机条数，可以传*）
      * @param int $limit 限制条数 默认 1
      * @param string $isOr 是否是 OR 查询 默认 AND
      * @return array|bool 返回结果的随机N条数据，如果Limit一条数据将直接返回该条数据的值
@@ -1443,9 +1444,9 @@ trait BaseModel
     /**
      * 查询某个字段的值相同的数据（同一张表指定字段值相同的数据，支持结果排序）
      *
-     * @param string $whereId 主键id
+     * @param string|int $whereId 主键id
      * @param string $field 指定字段名
-     * @param array $order 原生排序SQL语句 或 数组 如：['price','id'=>'desc'] 生成的SQL为 ORDER BY `price`,`id` desc
+     * @param array|string $order 原生排序SQL语句 或 数组 如：['price','id'=>'desc'] 生成的SQL为 ORDER BY `price`,`id` desc
      * @param bool $isModel 是否返回Model对象（默认 false 如果返回Model对象，我们还可以链式调用TP的分页，进行分页操作）
      * @return array|bool|\think\Model 返回与主键id对应的字段值数据相同的数据（包含主键id数据）
      */
@@ -1485,9 +1486,9 @@ trait BaseModel
     /**
      * 查询指定字段值重复的记录（支持多字段匹配，支持结果排序）
      *
-     * @param array $where 条件数组 条件闭包（如果需要查询整张表全部数据，可以传*）
+     * @param array|string|callable $where 条件数组 条件闭包（如果需要查询整张表全部数据，可以传*）
      * @param array $field 字段数组[field1,field2...]
-     * @param array $order 原生排序SQL语句 或 数组 如：['price','id'=>'desc'] 生成的SQL为 ORDER BY `price`,`id` desc
+     * @param array|string $order 原生排序SQL语句 或 数组 如：['price','id'=>'desc'] 生成的SQL为 ORDER BY `price`,`id` desc
      * @param string $isOr 是否是 OR 查询 默认 AND
      * @param bool $isModel 是否返回Model对象（默认 false 如果返回Model对象，我们还可以链式调用TP的分页，进行分页操作）
      * @return array|bool|\think\Model 返回重复的记录数据
@@ -1531,9 +1532,9 @@ trait BaseModel
     /**
      * 查询指定字段值不重复的记录【仅查询不重复的】（支持多字段匹配，支持结果排序）
      *
-     * @param array $where 条件数组 条件闭包（如果需要查询整张表全部数据，可以传*）
+     * @param array|string|callable $where 条件数组 条件闭包（如果需要查询整张表全部数据，可以传*）
      * @param array $field 字段数组[field1,field2...]
-     * @param array $order 原生排序SQL语句 或 数组 如：['price','id'=>'desc'] 生成的SQL为 ORDER BY `price`,`id` desc
+     * @param array|string $order 原生排序SQL语句 或 数组 如：['price','id'=>'desc'] 生成的SQL为 ORDER BY `price`,`id` desc
      * @param string $isOr 是否是 OR 查询 默认 AND
      * @param bool $isModel 是否返回Model对象（默认 false 如果返回Model对象，我们还可以链式调用TP的分页，进行分页操作）
      * @return array|bool|\think\Model 返回不重复的记录数据
@@ -1580,9 +1581,9 @@ trait BaseModel
      * Tips：应用场景 常用于判断类型或筛选权限等场景，例如 有个文章表里面有个type字段，它存储的是文章类型，有 1头条、2推荐、3热点、4图文等等
      *               现在有篇文章他既是头条，又是热点，还是图文，type中以 1,3,4 的格式存储。我们就可以使用此方法进行查询所有type中有4的图文类型的文章。
      *
-     * @param array $where 条件数组 条件闭包 或 主键id值（如果需要查询整张表全部数据，可以传*）
+     * @param array|string|int|callable $where 条件数组 条件闭包 或 主键id值（如果需要查询整张表全部数据，可以传*）
      * @param array $fieldAndVal 字段与值数组[field=>value]（value必须是string或int型）
-     * @param array $order 原生排序SQL语句 或 数组 如：['price','id'=>'desc'] 生成的SQL为 ORDER BY `price`,`id` desc
+     * @param array|string $order 原生排序SQL语句 或 数组 如：['price','id'=>'desc'] 生成的SQL为 ORDER BY `price`,`id` desc
      * @param string $isOr 是否是 OR 查询 默认 AND
      * @param bool $isModel 是否返回Model对象（默认 false 如果返回Model对象，我们还可以链式调用TP的分页，进行分页操作）
      * @return array|bool|\think\Model 返回满足条件的数组
@@ -1621,9 +1622,9 @@ trait BaseModel
     /**
      * FIND_IN_SET查询（查询指定字段在指定的集合的数据集合，效果类似于 field in (1,2,3,4,5) 的用法）
      *
-     * @param array $where 条件数组 条件闭包 或 主键id值（如果需要查询整张表全部数据，可以传*）
+     * @param array|string|int|callable $where 条件数组 条件闭包 或 主键id值（如果需要查询整张表全部数据，可以传*）
      * @param array $fieldAndVal 字段与值数组[field=>value]（value支持数组，如：[1,2,3,4,5]）
-     * @param array $order 原生排序SQL语句 或 数组 如：['price','id'=>'desc'] 生成的SQL为 ORDER BY `price`,`id` desc
+     * @param array|string $order 原生排序SQL语句 或 数组 如：['price','id'=>'desc'] 生成的SQL为 ORDER BY `price`,`id` desc
      * @param string $isOr 是否是 OR 查询 默认 AND
      * @param bool $isModel 是否返回Model对象（默认 false 如果返回Model对象，我们还可以链式调用TP的分页，进行分页操作）
      * @return array|bool|\think\Model 返回满足条件的数组
@@ -1666,8 +1667,8 @@ trait BaseModel
     /**
      * 查询List（支持分页，支持each回调）
      *
-     * @param array $where 条件数组 条件闭包（如果需要查询整张表全部数据，可以传*）
-     * @param array $order 原生排序SQL语句 或 数组 如：['price','id'=>'desc'] 生成的SQL为 ORDER BY `price`,`id` desc
+     * @param array|string|callable $where 条件数组 条件闭包（如果需要查询整张表全部数据，可以传*）
+     * @param array|string $order 原生排序SQL语句 或 数组 如：['price','id'=>'desc'] 生成的SQL为 ORDER BY `price`,`id` desc
      * @param callable|null $each 闭包回调函数（有些情况下我们需要对于查询出来的分页数据进行循环处理，通过each传入闭包处理函数即可）
      * @param int $pageLimit 分页每页显示记录数  默认 0 自动取 PaginateEnum 枚举类配置的条数
      * @param string $isOr 是否是 OR 查询 默认 AND
@@ -1707,8 +1708,8 @@ trait BaseModel
     /**
      * 查询列（支持指定字段的值作为索引）
      *
-     * @param array $where 条件数组 条件闭包（如果需要查询整张表全部数据，可以传*）
-     * @param array $field 要筛选的列数组 或 字符串（多个用逗号隔开）
+     * @param array|string|callable $where 条件数组 条件闭包（如果需要查询整张表全部数据，可以传*）
+     * @param array|string $field 要筛选的列数组 或 字符串（多个用逗号隔开）
      * @param string $index 指定用哪个字段当索引
      * @param string $isOr 是否是 OR 查询 默认 AND
      * @return array|bool 返回 查询后的数据
@@ -1745,7 +1746,7 @@ trait BaseModel
      * 设置基础查询条件（用于简化基础alias、join和主表field）
      *
      * @param string $alias 当前模型别名 示例：在order模型中联查order_goods表，此字段写 order
-     * @param array $field 当前模型主表字段集合[field1,field2...]（主表字段不需要带别名，传 [] 或 * 都视为查询全部）
+     * @param array|string $field 当前模型主表字段集合[field1,field2...]（主表字段不需要带别名，传 [] 或 * 都视为查询全部）
      *
      * @param array $join 连接的表 示例：此字段写二维数组 [['order_goods og', 'order_id', 'id'],...] 允许多个表联查
      *
@@ -1807,7 +1808,7 @@ trait BaseModel
                     $className = "app\\model\\entity\\" . ucfirst($this->toHumpScore($tb));
                     if (class_exists($className)) {
                         ${$tb . "Class"} = new $className;
-                        $model           = $this->filterSoftDelData($model, "excludeSoft", $tbAlias, ${$tb . "Class"});
+                        $model           = $this->filterSoftDelData($model, MethodEnum::EXCLUDE_SOFT, $tbAlias, ${$tb . "Class"});
                     }
                 } else {
                     foreach ($join as $item) {
@@ -1827,7 +1828,7 @@ trait BaseModel
                             ${$tb . "Class"} = new $className;
                             $model           = $this->filterSoftDelData(
                                 $model,
-                                "excludeSoft",
+                                MethodEnum::EXCLUDE_SOFT,
                                 $tbAlias,
                                 ${$tb . "Class"}
                             );
@@ -1836,7 +1837,7 @@ trait BaseModel
                 }
             }
             // 主表软删除过滤
-            $model = $this->filterSoftDelData($model, "excludeSoft", $aliasValue);
+            $model = $this->filterSoftDelData($model, MethodEnum::EXCLUDE_SOFT, $aliasValue);
             return $model;
         } catch (\Exception $e) {
             // 返回model错误
@@ -1848,8 +1849,8 @@ trait BaseModel
     /**
      * Join联查(innerJoin，如果表中有至少一个匹配，则返回行)
      *
-     * @param array $where 条件数组 条件闭包（如果需要查询整张表全部数据，可以传*）
-     * @param array $fields 字段数组 或 字段字符串（多个用逗号隔开，主表别名统一默认为字符串“this”，主表字段筛选，统一使用“this.字段名”）
+     * @param array|string|callable $where 条件数组 条件闭包（如果需要查询整张表全部数据，可以传*）
+     * @param array|string $fields 字段数组 或 字段字符串（多个用逗号隔开，主表别名统一默认为字符串“this”，主表字段筛选，统一使用“this.字段名”）
      * @param array $join 连接的表 规则同上述 setBaseQuery 方法的参数 join
      * @param string $isOr 是否是 OR 查询 默认 AND
      * @param bool $isModel 是否返回Model对象（默认 false 如果返回Model对象，我们还可以链式调用TP的分页，进行分页操作）
@@ -1883,8 +1884,8 @@ trait BaseModel
     /**
      * leftJoin联查（即使右表中没有匹配，也从左表返回所有的行）
      *
-     * @param array $where 条件数组 条件闭包（如果需要查询整张表全部数据，可以传*）
-     * @param array $fields 字段数组 或 字段字符串（多个用逗号隔开，主表别名统一默认为字符串“this”，主表字段筛选，统一使用“this.字段名”）
+     * @param array|string|callable $where 条件数组 条件闭包（如果需要查询整张表全部数据，可以传*）
+     * @param array|string $fields 字段数组 或 字段字符串（多个用逗号隔开，主表别名统一默认为字符串“this”，主表字段筛选，统一使用“this.字段名”）
      * @param array $join 连接的表 规则同上述 setBaseQuery 方法的参数 join
      * @param string $isOr 是否是 OR 查询 默认 AND
      * @param bool $isModel 是否返回Model对象（默认 false 如果返回Model对象，我们还可以链式调用TP的分页，进行分页操作）
@@ -1918,8 +1919,8 @@ trait BaseModel
     /**
      * rightJoin联查（即使左表中没有匹配，也从右表返回所有的行）
      *
-     * @param array $where 条件数组 条件闭包（如果需要查询整张表全部数据，可以传*）
-     * @param array $fields 字段数组 或 字段字符串（多个用逗号隔开，主表别名统一默认为字符串“this”，主表字段筛选，统一使用“this.字段名”）
+     * @param array|string|callable $where 条件数组 条件闭包（如果需要查询整张表全部数据，可以传*）
+     * @param array|string $fields 字段数组 或 字段字符串（多个用逗号隔开，主表别名统一默认为字符串“this”，主表字段筛选，统一使用“this.字段名”）
      * @param array $join 连接的表 规则同上述 setBaseQuery 方法的参数 join
      * @param string $isOr 是否是 OR 查询 默认 AND
      * @param bool $isModel 是否返回Model对象（默认 false 如果返回Model对象，我们还可以链式调用TP的分页，进行分页操作）
@@ -1953,8 +1954,8 @@ trait BaseModel
     /**
      * fullJoin联查（只要其中一个表中存在匹配，就返回行，Mysql数据库不支持）
      *
-     * @param array $where 条件数组 条件闭包（如果需要查询整张表全部数据，可以传*）
-     * @param array $fields 字段数组 或 字段字符串（多个用逗号隔开，主表别名统一默认为字符串“this”，主表字段筛选，统一使用“this.字段名”）
+     * @param array|string|callable $where 条件数组 条件闭包（如果需要查询整张表全部数据，可以传*）
+     * @param array|string $fields 字段数组 或 字段字符串（多个用逗号隔开，主表别名统一默认为字符串“this”，主表字段筛选，统一使用“this.字段名”）
      * @param array $join 连接的表 规则同上述 setBaseQuery 方法的参数 join
      * @param string $isOr 是否是 OR 查询 默认 AND
      * @param bool $isModel 是否返回Model对象（默认 false 如果返回Model对象，我们还可以链式调用TP的分页，进行分页操作）
@@ -1988,7 +1989,7 @@ trait BaseModel
     /**
      * 一对多子查询（支持分页，支持主表、子表字段过滤，返回值类似TP的with查询返回）
      *
-     * @param array $where 条件数组 条件闭包（如果需要查询整张表全部数据，可以传*）
+     * @param array|string|callable $where 条件数组 条件闭包（如果需要查询整张表全部数据，可以传*）
      * @param array $fields 字段数组（主表别名统一默认为字符串“this”，主表字段筛选，统一使用“this.字段名”）
      *
      * @param array $with 连接的子表 规则同上述 setBaseQuery 方法的参数 join 类似
@@ -2085,7 +2086,7 @@ trait BaseModel
                 }
                 // 主查询
                 $model = $model->field($mainField);
-                $model = $this->filterSoftDelData($model, "excludeSoft", "this");
+                $model = $this->filterSoftDelData($model, MethodEnum::EXCLUDE_SOFT, "this");
                 if ($isPaginate) {
                     $pageConfig = $this->getPaginateConfig($pageLimit);
                     $mainObj    = $model->paginate($pageConfig, false);
@@ -2111,7 +2112,7 @@ trait BaseModel
                             }
                             $child = $childClass::alias($tbAlias)->field($selectField)
                                 ->where($foreignKey, "in", $mainKeyArray);
-                            $child = $this->filterSoftDelData($child, "excludeSoft", $tbAlias, new $childClass);
+                            $child = $this->filterSoftDelData($child, MethodEnum::EXCLUDE_SOFT, $tbAlias, new $childClass);
                             $child = $child->select();
                             if (count($child->toArray()) > 0) {
                                 // 拼装
