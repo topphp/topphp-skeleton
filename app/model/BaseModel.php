@@ -216,8 +216,9 @@ trait BaseModel
      */
     private function genBaseModel($where, string $pkName, string $isOr = "and")
     {
-        if (is_array($where) && $this->arrayLevel($where) == 1 && !empty($where[1]) && is_string($where[1])) {
-            if (in_array($where[1], $this->getWhereExp())) {
+        if (is_array($where) && ($this->arrayLevel($where) == 1 || $this->arrayLevel($where) == 2)
+            && !empty($where[1]) && is_string($where[1])) {
+            if (in_array(strtolower($where[1]), $this->getWhereExp())) {
                 $where[1] = strtoupper($where[1]);
                 $where    = [$where];
             }
@@ -301,8 +302,9 @@ trait BaseModel
             return false;
         }
         // 构造where
-        if (is_array($where) && $this->arrayLevel($where) == 1 && !empty($where[1]) && is_string($where[1])) {
-            if (in_array($where[1], $this->getWhereExp())) {
+        if (is_array($where) && ($this->arrayLevel($where) == 1 || $this->arrayLevel($where) == 2)
+            && !empty($where[1]) && is_string($where[1])) {
+            if (in_array(strtolower($where[1]), $this->getWhereExp())) {
                 $where[1] = strtoupper($where[1]);
                 $where    = [$where];
             }
@@ -320,9 +322,9 @@ trait BaseModel
                         array_push($mainField, substr($field, 5));
                         unset($fields[$k]);
                     } elseif (!preg_match("/\./", $field) && isset($this->schema) && in_array(
-                        $field,
-                        array_keys($this->schema)
-                    )) {
+                            $field,
+                            array_keys($this->schema)
+                        )) {
                         // 区分是否是主表字段
                         array_push($mainField, $field);
                         unset($fields[$k]);
@@ -1028,9 +1030,9 @@ trait BaseModel
                         $data->delete();
                         return $delNum;
                     } elseif (isset($this->schema[$deleteTimeField]) && in_array(
-                        $this->schema[$deleteTimeField],
-                        $dbTimeType
-                    )) {
+                            $this->schema[$deleteTimeField],
+                            $dbTimeType
+                        )) {
                         $time = $this->genDateTime($this->schema[$deleteTimeField]);
                     } elseif (isset($this->schema['delete_time'])) {
                         $deleteTimeField = 'delete_time';
@@ -1112,9 +1114,9 @@ trait BaseModel
                         $data->delete();
                         return $delNum;
                     } elseif (isset($this->schema[$deleteTimeField]) && in_array(
-                        $this->schema[$deleteTimeField],
-                        $dbTimeType
-                    )) {
+                            $this->schema[$deleteTimeField],
+                            $dbTimeType
+                        )) {
                         $time = $this->genDateTime($this->schema[$deleteTimeField]);
                     } elseif (isset($this->schema['delete_time'])) {
                         $deleteTimeField = 'delete_time';
@@ -1808,7 +1810,8 @@ trait BaseModel
                     $className = "app\\model\\entity\\" . ucfirst($this->toHumpScore($tb));
                     if (class_exists($className)) {
                         ${$tb . "Class"} = new $className;
-                        $model           = $this->filterSoftDelData($model, MethodEnum::EXCLUDE_SOFT, $tbAlias, ${$tb . "Class"});
+                        $model           = $this->filterSoftDelData($model, MethodEnum::EXCLUDE_SOFT, $tbAlias,
+                            ${$tb . "Class"});
                     }
                 } else {
                     foreach ($join as $item) {
@@ -2017,8 +2020,9 @@ trait BaseModel
             $alias    = "this";
             $idName   = $this->getPk();
             $isSelect = false;
-            if (is_array($where) && $this->arrayLevel($where) == 1 && !empty($where[1]) && is_string($where[1])) {
-                if (in_array($where[1], $this->getWhereExp())) {
+            if (is_array($where) && ($this->arrayLevel($where) == 1 || $this->arrayLevel($where) == 2)
+                && !empty($where[1]) && is_string($where[1])) {
+                if (in_array(strtolower($where[1]), $this->getWhereExp())) {
                     $where[1] = strtoupper($where[1]);
                     $where    = [$where];
                 }
@@ -2045,9 +2049,9 @@ trait BaseModel
                                 array_push($mainField, substr($field, 5));
                                 unset($fields[$k]);
                             } elseif (!preg_match("/\./", $field) && isset($this->schema) && in_array(
-                                $field,
-                                array_keys($this->schema)
-                            )) {
+                                    $field,
+                                    array_keys($this->schema)
+                                )) {
                                 // 区分是否是主表字段
                                 array_push($mainField, $field);
                                 unset($fields[$k]);
@@ -2112,7 +2116,8 @@ trait BaseModel
                             }
                             $child = $childClass::alias($tbAlias)->field($selectField)
                                 ->where($foreignKey, "in", $mainKeyArray);
-                            $child = $this->filterSoftDelData($child, MethodEnum::EXCLUDE_SOFT, $tbAlias, new $childClass);
+                            $child = $this->filterSoftDelData($child, MethodEnum::EXCLUDE_SOFT, $tbAlias,
+                                new $childClass);
                             $child = $child->select();
                             if (count($child->toArray()) > 0) {
                                 // 拼装
