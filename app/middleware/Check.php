@@ -23,10 +23,10 @@ class Check
         $module       = app('http')->getName();
         $controller   = $request->controller();
         $operateClass = 'app\\' . $module . "\\controller\\" . preg_replace(
-                "/\./",
-                "\\",
-                $controller
-            );
+            "/\./",
+            "\\",
+            $controller
+        );
         $checkBool    = true;
         if (!method_exists($operateClass, $request->action())) {
             if ($request->isAjax() || $request->isPjax()) {
