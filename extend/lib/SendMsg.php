@@ -167,12 +167,13 @@ class SendMsg
      * @param $sendArray
      * @param bool $isList 是否data数据返回list形式（仅data为对象或数组有效）
      * @param int $httpCode
+     * @param array $headers
      * @return \think\Response
      */
-    public static function jsonSend($sendArray, $isList = false, $httpCode = HttpStatusEnum::SUCCESS)
+    public static function jsonSend($sendArray, $isList = false, $httpCode = HttpStatusEnum::SUCCESS, $headers = [])
     {
         if (!is_array($sendArray)) {
-            return response(self::renderArray(), HttpStatusEnum::SUCCESS, [], "json");
+            return response(self::renderArray(), HttpStatusEnum::SUCCESS, $headers, "json");
         }
         $sendArray = self::checkArray($sendArray, $isList);
         if ((int)$sendArray['httpCode'] !== $httpCode && config("app.show_http_status")) {
@@ -183,7 +184,7 @@ class SendMsg
             $sendArray['message'],
             $sendArray['data'],
             $sendArray['httpCode']
-        ), $httpCode, [], 'json');
+        ), $httpCode, $headers, 'json');
     }
 
     /**
@@ -347,12 +348,13 @@ class SendMsg
      * @param $sendArray
      * @param bool $isList 是否data数据返回list形式
      * @param int $httpCode
+     * @param array $headers
      * @return \think\Response
      */
-    public static function xmlSend($sendArray, $isList = false, $httpCode = HttpStatusEnum::SUCCESS)
+    public static function xmlSend($sendArray, $isList = false, $httpCode = HttpStatusEnum::SUCCESS, $headers = [])
     {
         if (!is_array($sendArray)) {
-            return response(self::renderArray(), HttpStatusEnum::SUCCESS, [], "xml");
+            return response(self::renderArray(), HttpStatusEnum::SUCCESS, $headers, "xml");
         }
         $sendArray = self::checkArray($sendArray, $isList);
         if ((int)$sendArray['httpCode'] !== $httpCode && config("app.show_http_status")) {
@@ -363,7 +365,7 @@ class SendMsg
             $sendArray['message'],
             $sendArray['data'],
             $sendArray['httpCode']
-        ), $httpCode, [], 'xml');
+        ), $httpCode, $headers, 'xml');
     }
 
     /**
