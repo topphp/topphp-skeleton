@@ -288,7 +288,7 @@ trait BaseModel
 
     /**
      * base join
-     * @param array|string|int|callable $where
+     * @param array|string|callable $where
      * @param string|array $fields
      * @param array $join
      * @param string $isOr
