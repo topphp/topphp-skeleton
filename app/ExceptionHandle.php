@@ -138,9 +138,9 @@ class ExceptionHandle extends Handle
         }
         $appName = app('http')->getName();
         if ($request->isAjax() || $request->isPjax() || isset($e->httpCode) || in_array(
-                $appName,
-                config("app.exception_app_list")
-            )) {
+            $appName,
+            config("app.exception_app_list")
+        )) {
             $returnData = $this->createReturn($request, $code, $message, $topData, $httpCode, $abnormity);
             return $this->sendMsg($returnData, $httpCode, $topHeaders);
         }
