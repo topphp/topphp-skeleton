@@ -102,7 +102,6 @@ TopPHP骨架已内置Top组件
   Tips：默认的 index admin 应用 与 api 多版本应用已配置好全局验证器Check中间件，开发者可以不用关心中间件的配置问题，只需要在对应的应用下validate目录添加验证器文件与配置规则即可，骨架会自动验证并返回信息。
        开发者可以结合对应的示例文件和TP6.0的验证器文档进行配置，骨架还提供单独验证某个字段的写法：
        单独验证：在验证器文件配置好单独验证的场景【"index@username"=>['username']】后，直接在控制器调用 checkOneRequestParam("username","post"); 方法即可
-       
 ~~~
 
 [附：TP6.0完全开发手册](https://www.kancloud.cn/manual/thinkphp6_0/content)
