@@ -27,7 +27,7 @@ Topphp
 ## 安装
 
 ~~~
-composer require topphp/topphp-skeleton
+composer create-project topphp/topphp-skeleton=dev-master
 ~~~
 
 如果需要更新TP6框架使用
