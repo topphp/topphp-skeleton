@@ -20,7 +20,7 @@
     "topthink/think-annotation": "^1.0",
     "topthink/think-multi-app": "^1.0",
     "topphp/topphp-log": "^1.0",
-    "topphp/topphp-generate": "dev-master",
+    "topphp/topphp-generate": "^1.0",
     "topthink/think-view": "^1.0"
   },
   "require-dev": {
