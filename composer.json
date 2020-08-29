@@ -61,10 +61,6 @@
     "packagist": {
       "type": "composer",
       "url": "https://mirrors.aliyun.com/composer"
-    },
-    "topphp": {
-      "type": "path",
-      "url": "../topphp/*"
     }
   }
 }
