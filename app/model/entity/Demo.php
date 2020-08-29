@@ -24,7 +24,7 @@ use think\Model;
  */
 class Demo extends Model
 {
-    use BaseModel;
+    //use BaseModel;
 
     protected $pk = 'id';
 
